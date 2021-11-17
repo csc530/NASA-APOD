@@ -8,6 +8,10 @@ module space.nasa.spaceapi {
 	requires org.kordamp.ikonli.javafx;
 	requires org.kordamp.bootstrapfx.core;
 	requires eu.hansolo.tilesfx;
+	requires com.google.gson;
+	requires java.net.http;
 	opens space.nasa.spaceapi to javafx.fxml;
 	exports space.nasa.spaceapi;
+	opens space.nasa.spaceapi.models to com.google.gson;
+	exports space.nasa.spaceapi.models to com.google.gson;
 }
