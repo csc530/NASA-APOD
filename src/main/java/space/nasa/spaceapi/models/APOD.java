@@ -33,6 +33,10 @@ public class APOD{
 		return mediaType;
 	}
 	
+	public String getCopyright(){
+		return copyright;
+	}
+	
 	public String getTitle(){
 		return title;
 	}

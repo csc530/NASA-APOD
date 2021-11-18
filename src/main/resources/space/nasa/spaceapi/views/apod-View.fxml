@@ -17,6 +17,7 @@
                <children>
                   <Label fx:id="title" text="Label" />
                   <Label fx:id="date" text="Label" />
+                  <Label fx:id="copyright" text="Label" />
                </children>
             </VBox>
          </top>
@@ -38,7 +39,7 @@
          <bottom>
             <VBox alignment="CENTER" prefHeight="50.0" spacing="15.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="expl" alignment="CENTER" contentDisplay="CENTER" minHeight="50.0" minWidth="100.0" text="Label" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS" wrapText="true" VBox.vgrow="ALWAYS" />
+                  <Label fx:id="explanation" alignment="CENTER" contentDisplay="CENTER" minHeight="50.0" minWidth="100.0" text="Label" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS" wrapText="true" VBox.vgrow="ALWAYS" />
                   <Button mnemonicParsing="false" onAction="#back" text="Button" />
                </children>
             </VBox>
