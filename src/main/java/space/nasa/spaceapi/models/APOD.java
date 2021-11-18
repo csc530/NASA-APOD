@@ -15,6 +15,31 @@ public class APOD{
 	private URL hdUrl;
 	@SerializedName("media_type")
 	private String mediaType;
+	
+	public Date getDate(){
+		return date;
+	}
+	
+	public String getExplanation(){
+		return explanation;
+	}
+	
+	public URL getHdUrl(){
+		return hdUrl;
+	}
+	
+	public String getMediaType(){
+		return mediaType;
+	}
+	
+	public String getTitle(){
+		return title;
+	}
+	
+	public URL getUrl(){
+		return url;
+	}
+	
 	private String title;
 	private URL url;
 	
