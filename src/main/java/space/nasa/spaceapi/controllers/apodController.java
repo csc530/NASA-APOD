@@ -13,7 +13,7 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.util.ResourceBundle;
 
-public class ApodContr implements Initializable{
+public class apodController implements Initializable{
 	@FXML
 	private Label date;
 	@FXML
@@ -45,7 +45,7 @@ public class ApodContr implements Initializable{
 		APOD apod = API.getAPOD();
 		expl.setText(apod.getExplanation());
 		title.setText(apod.getTitle());
-		image.setImage(new Image(String.valueOf(apod.getHdUrl())));
+		image.setImage(apod.getImage());
 		date.setText(apod.getDateString());
 	}
 }

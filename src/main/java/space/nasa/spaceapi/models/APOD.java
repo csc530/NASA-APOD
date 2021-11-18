@@ -1,6 +1,7 @@
 package space.nasa.spaceapi.models;
 
 import com.google.gson.annotations.SerializedName;
+import javafx.scene.image.Image;
 
 import java.net.URL;
 import java.text.DateFormat;
@@ -15,7 +16,7 @@ public class APOD{
 	private URL hdUrl;
 	@SerializedName("media_type")
 	private String mediaType;
-	
+	private String copyright;
 	public Date getDate(){
 		return date;
 	}
@@ -42,6 +43,10 @@ public class APOD{
 	
 	private String title;
 	private URL url;
+	public Image getImage(){
+		URL imgUrl  = hdUrl==null ? url : hdUrl;
+		return new Image(imgUrl.toString());
+	}
 	public String getDateString(){
 		return		                                DateFormat.getDateInstance(DateFormat.FULL, Locale.getDefault()).format(date);
 	}
