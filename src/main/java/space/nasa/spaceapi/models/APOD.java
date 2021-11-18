@@ -42,7 +42,9 @@ public class APOD{
 	
 	private String title;
 	private URL url;
-	
+	public String getDateString(){
+		return		                                DateFormat.getDateInstance(DateFormat.FULL, Locale.getDefault()).format(date);
+	}
 	@Override
 	public String toString(){
 		return "%s\n%s\n%s\n".formatted(title,

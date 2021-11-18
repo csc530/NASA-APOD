@@ -10,10 +10,12 @@ import space.nasa.spaceapi.models.APOD;
 import space.nasa.spaceapi.utilities.API;
 
 import java.net.URL;
+import java.text.DateFormat;
 import java.util.ResourceBundle;
 
-public class Apod implements Initializable{
-	
+public class ApodContr implements Initializable{
+	@FXML
+	private Label date;
 	@FXML
 	private Label title;
 	
@@ -44,6 +46,6 @@ public class Apod implements Initializable{
 		expl.setText(apod.getExplanation());
 		title.setText(apod.getTitle());
 		image.setImage(new Image(String.valueOf(apod.getHdUrl())));
-		
+		date.setText(apod.getDateString());
 	}
 }

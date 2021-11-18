@@ -14,10 +14,6 @@ public class API{
 	private static final HttpClient client = HttpClient.newHttpClient();
 	private static final String key = "1rp568Tl7gR9976UiFzaPbedFvxnBFFYbdqxXazV";
 	
-	public static void main(String[] args) throws IOException, InterruptedException{
-		System.out.println(getAPOD());
-	}
-	
 	public static APOD getAPOD(){
 		String uri = "https://api.nasa.gov/planetary/apod?api_key=" + key;
 		HttpRequest request = HttpRequest.newBuilder().uri(URI.create(uri)).build();
