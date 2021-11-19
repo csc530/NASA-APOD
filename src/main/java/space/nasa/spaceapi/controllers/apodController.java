@@ -9,6 +9,10 @@ import space.nasa.spaceapi.models.APOD;
 import space.nasa.spaceapi.utilities.API;
 
 import java.net.URL;
+import java.text.DateFormat;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class apodController implements Initializable{
@@ -26,7 +30,7 @@ public class apodController implements Initializable{
 	
 	@FXML
 	private Label explanation;
-	
+	private APOD apod;
 	@FXML
 	void back(ActionEvent event) {
 	
@@ -39,13 +43,18 @@ public class apodController implements Initializable{
 	
 	@FXML
 	void prev(ActionEvent event) {
-	
+		apod = API.getAPOD(apod.getDate().minusDays(1));
+		updateAPOD();
 	}
 
 	
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle){
-		APOD apod = API.getAPOD();
+		apod = API.getAPOD();
+		updateAPOD();
+	}
+	
+	private void updateAPOD(){
 		explanation.setText(apod.getExplanation());
 		title.setText(apod.getTitle());
 		image.setImage(apod.getImage());

@@ -8,14 +8,23 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.LocalDate;
 
 public class API{
 	private static final Gson gson = new Gson();
 	private static final HttpClient client = HttpClient.newHttpClient();
 	private static final String key = "1rp568Tl7gR9976UiFzaPbedFvxnBFFYbdqxXazV";
+	private static final String uri = "https://api.nasa.gov/planetary/apod?thumbs=true&api_key=" + key;
 	
 	public static APOD getAPOD(){
-		String uri = "https://api.nasa.gov/planetary/apod?api_key=" + key;
+		return getApod(uri);
+	}
+	
+	public static APOD getAPOD(LocalDate date){
+		return getApod(uri + "&date=" + date);
+	}
+	
+	public static APOD getApod(String uri){
 		HttpRequest request = HttpRequest.newBuilder().uri(URI.create(uri)).build();
 		try
 		{

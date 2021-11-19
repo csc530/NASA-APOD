@@ -5,6 +5,7 @@ import javafx.scene.image.Image;
 
 import java.net.URL;
 import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Locale;
 
@@ -14,11 +15,24 @@ public class APOD{
 	private String explanation;
 	@SerializedName("hdurl")
 	private URL hdUrl;
+	// will either be "video" or "image"
 	@SerializedName("media_type")
 	private String mediaType;
 	private String copyright;
-	public Date getDate(){
-		return date;
+	@SerializedName("thumbnail_url")
+	private URL thumbnail;
+	
+	public static final String[] mediaTypes= {"video","image"} ;
+	public URL getThumbnail(){
+		return thumbnail;
+	}
+	
+	public APOD(){}
+	
+	public LocalDate getDate(){
+		//Converts date which opens to gson to LocalDate (which doesn't) so subtract and add and better functions can be performed
+		// divide 60 60 24 to convert the epochSecond to epoch Day for the method to work correctly
+		return LocalDate.ofEpochDay(date.toInstant().getEpochSecond()/60/60/24);
 	}
 	
 	public String getExplanation(){
@@ -49,7 +63,14 @@ public class APOD{
 	private URL url;
 	public Image getImage(){
 		URL imgUrl  = hdUrl==null ? url : hdUrl;
+		if(mediaType.equals(mediaTypes[1]))
+			imgUrl=thumbnail;
 		return new Image(imgUrl.toString());
+	}
+	public URL getVideo(){
+		if(mediaType.equals(mediaTypes[1]))
+			return url;
+		return null;
 	}
 	public String getDateString(){
 		return		                                DateFormat.getDateInstance(DateFormat.FULL, Locale.getDefault()).format(date);
@@ -58,6 +79,6 @@ public class APOD{
 	public String toString(){
 		return "%s\n%s\n%s\n".formatted(title,
 		                                explanation,
-		                                DateFormat.getDateInstance(DateFormat.FULL, Locale.getDefault()).format(date));
+		                                getDateString());
 	}
 }

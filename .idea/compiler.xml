@@ -11,6 +11,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="spaceAPI" target="17" />
+      <module name="spaceapi" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>
