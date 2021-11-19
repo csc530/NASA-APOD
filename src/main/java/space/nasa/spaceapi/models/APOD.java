@@ -62,15 +62,13 @@ public class APOD{
 	private String title;
 	private URL url;
 	public Image getImage(){
-		URL imgUrl  = hdUrl==null ? url : hdUrl;
-		if(mediaType.equals(mediaTypes[1]))
-			imgUrl=thumbnail;
+		if(mediaType.equals(mediaTypes[0]))
+			return new Image(String.valueOf(thumbnail));
+		URL imgUrl = (hdUrl == null) ? url : hdUrl;
 		return new Image(imgUrl.toString());
 	}
 	public URL getVideo(){
-		if(mediaType.equals(mediaTypes[1]))
-			return url;
-		return null;
+		return mediaType.equals(mediaTypes[1]) ? null : url;
 	}
 	public String getDateString(){
 		return		                                DateFormat.getDateInstance(DateFormat.FULL, Locale.getDefault()).format(date);
