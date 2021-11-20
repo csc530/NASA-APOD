@@ -48,7 +48,7 @@
                         <Rectangle2D />
                      </viewport>
                   </ImageView>
-                  <MediaView fitHeight="200.0" fitWidth="200.0" visible="false" />
+                  <MediaView fx:id="video" fitHeight="200.0" fitWidth="200.0" visible="false" />
                </children>
             </StackPane>
          </center>

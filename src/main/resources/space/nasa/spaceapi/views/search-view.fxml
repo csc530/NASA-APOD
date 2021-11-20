@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="525.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="space.nasa.spaceapi.controllers.searchController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="525.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="space.nasa.spaceapi.controllers.searchController">
 	<children>
 		<BorderPane prefHeight="525.0" prefWidth="750.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 			<bottom>
@@ -34,58 +34,55 @@
          <center>
             <HBox alignment="CENTER" BorderPane.alignment="CENTER">
                <children>
-                  <VBox HBox.hgrow="SOMETIMES">
+                  <VBox spacing="30.0" HBox.hgrow="SOMETIMES">
                      <children>
-                        <Label text="Seach for one day's A.P.O,D." />
-                        <GridPane>
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="75.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-                          </rowConstraints>
+                        <VBox>
                            <children>
-                              <Label text="Date" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                              <DatePicker fx:id="date" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+                              <Label text="Search for one day's A.P.O,D." />
+                              <HBox spacing="20.0">
+                                 <children>
+                                    <Label contentDisplay="CENTER" text="Date" textAlignment="CENTER" HBox.hgrow="SOMETIMES" />
+                                    <DatePicker fx:id="date" HBox.hgrow="SOMETIMES" />
+                                    <Button mnemonicParsing="false" onAction="#search" text="Search" />
+                                 </children>
+                              </HBox>
                            </children>
-                        </GridPane>
-                        <Label text="Random amount of A.P.O.D.s" />
-                        <GridPane>
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints />
-                            <RowConstraints />
-                            <RowConstraints />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
+                        </VBox>
+                        <VBox>
                            <children>
-                              <Label text="Amount" GridPane.rowIndex="3" />
-                              <Spinner fx:id="count" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Label text="Random amount of A.P.O.D.s" />
+                              <HBox>
+                                 <children>
+                                    <Label text="Amount" />
+                                    <Spinner fx:id="count" />
+                                    <Button mnemonicParsing="false" onAction="#random" text="Randomize" />
+                                 </children>
+                              </HBox>
+                              <Label text="if the amount is 1 or less only one random A.P.O.D. will be returned" />
                            </children>
-                        </GridPane>
-                        <Label text="if the amount is 1 or less only one random A.P.O.D. will be returned" />
-                        <Label text="Seach A.P.O.D.s between a date" />
-                        <GridPane>
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
+                        </VBox>
+                        <VBox>
                            <children>
-                              <DatePicker fx:id="start" GridPane.columnIndex="1" />
-                              <DatePicker fx:id="end" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label text="End date" GridPane.rowIndex="1" />
-                              <Label text="Start date" />
+                              <Label text="Seach A.P.O.D.s between a date" />
+                              <GridPane>
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <DatePicker fx:id="start" GridPane.columnIndex="1" />
+                                    <DatePicker fx:id="end" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <Label text="End date" GridPane.rowIndex="1" />
+                                    <Label text="Start date" />
+                                 </children>
+                              </GridPane>
+                              <Button mnemonicParsing="false" onAction="#rSearch" text="Search" />
                            </children>
-                        </GridPane>
-                        <Button mnemonicParsing="false" onAction="#search" text="Search" />
+                        </VBox>
                      </children>
                   </VBox>
                   <ListView fx:id="apods" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="SOMETIMES" />
