@@ -5,7 +5,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import space.nasa.spaceapi.models.APOD;
+import space.nasa.spaceapi.utilities.API;
+import space.nasa.spaceapi.utilities.Transition;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
@@ -32,14 +35,21 @@ public class searchController implements Initializable{
 	
 	@FXML
 	void rSearch(ActionEvent event){
+		apods.getItems().addAll(apodController.setApod(API.getAPODs(start.getValue(),end.getValue())));
 	}
 	
 	@FXML
 	void random(ActionEvent event){
+//		apods.getItems().clear();
+//		if(count.getValue() > 1)
+//			apods.getItems().addAll(API.getAPODs());
+//		else apods.getItems().addAll(API.getAPOD());
 	}
 	
 	@FXML
-	void search(ActionEvent event){
+	void search(ActionEvent event) throws IOException{
+		Transition.to(event,"/views/apod-view.fxml","");
+		apodController.setApod(API.getAPOD(date.getValue()));
 	}
 	
 	@Override

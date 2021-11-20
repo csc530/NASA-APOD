@@ -25,7 +25,11 @@ public class apodController implements Initializable{
 	private ImageView image;
 	@FXML
 	private Label explanation;
-	private APOD apod;
+	private static APOD apod;
+	
+	public static void setApod(APOD apod){
+		apodController.apod = apod;
+	}
 	
 	@FXML
 	void back(ActionEvent event){
