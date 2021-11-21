@@ -4,7 +4,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.layout.Background;
 import space.nasa.spaceapi.models.APOD;
 import space.nasa.spaceapi.utilities.API;
 import space.nasa.spaceapi.utilities.Transition;
@@ -57,12 +56,12 @@ public class searchController implements Initializable{
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle){
 		count.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 1));
-		start.setValue(minDate);
-		end.setValue(LocalDate.now());
-		date.setValue(LocalDate.now());
 		addDateChecker(start);
 		addDateChecker(date);
 		addDateChecker(end);
+		start.setValue(LocalDate.now().minusDays(7));
+		end.setValue(LocalDate.now());
+		date.setValue(LocalDate.ofEpochDay((long) (Math.random() *(LocalDate.now().toEpochDay()-minDate.toEpochDay()  ) + minDate.toEpochDay())));
 	}
 	
 	public void addDateChecker(DatePicker datepicker){
