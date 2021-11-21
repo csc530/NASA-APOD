@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.Background;
 import space.nasa.spaceapi.models.APOD;
 import space.nasa.spaceapi.utilities.API;
 import space.nasa.spaceapi.utilities.Transition;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class searchController implements Initializable{
+	public static final LocalDate minDate = LocalDate.parse("1995-06-16");
 	@FXML
 	private Label explanation;
 	@FXML
@@ -35,7 +37,7 @@ public class searchController implements Initializable{
 	
 	@FXML
 	void rSearch(ActionEvent event){
-		apods.getItems().addAll(apodController.setApod(API.getAPODs(start.getValue(),end.getValue())));
+		apods.getItems().addAll((API.getAPODs(start.getValue(), end.getValue())));
 	}
 	
 	@FXML
@@ -48,31 +50,29 @@ public class searchController implements Initializable{
 	
 	@FXML
 	void search(ActionEvent event) throws IOException{
-		Transition.to(event,"/views/apod-view.fxml","");
+		Transition.to(event, "/views/apod-view.fxml", "");
 		apodController.setApod(API.getAPOD(date.getValue()));
 	}
 	
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle){
 		count.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 1));
-		start.setShowWeekNumbers(true);
-		end.setShowWeekNumbers(true);
-		date.setShowWeekNumbers(true);
+		start.setValue(minDate);
+		end.setValue(LocalDate.now());
+		date.setValue(LocalDate.now());
 		addDateChecker(start);
 		addDateChecker(date);
 		addDateChecker(end);
-		
 	}
 	
 	public void addDateChecker(DatePicker datepicker){
-		datepicker.dayCellFactoryProperty().setValue(datePicker -> {
-			DateCell dateCell = new DateCell();
-			dateCell.setItem(datePicker.getValue());
-			if(datePicker.getValue().isBefore(LocalDate.parse("1995-06-16")))
-				dateCell.setItem(LocalDate.parse("1996-06-16"));
-			else if(datePicker.getValue().isAfter(LocalDate.now()))
-				dateCell.setItem(LocalDate.now());
-			return dateCell;
+		//https://stackoverflow.com/a/53186959/16929246
+		datepicker.setDayCellFactory(param -> new DateCell(){
+			@Override
+			public void updateItem(LocalDate item, boolean empty){
+				super.updateItem(item, empty);
+				setDisable(item.isAfter(LocalDate.now()) || item.isBefore(minDate));
+			}
 		});
 	}
 }
