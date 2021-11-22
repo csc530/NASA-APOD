@@ -1,0 +1,9 @@
+.root{
+    -fxbackground-color: rgba(0, 0, 0, 0.75);
+    -fxborder-color: rgba(255, 255, 255, 0.15);
+    font-family: Inconsolata,sans-serif;
+}
+.header {
+    font-size: 35px;
+    color: rgba(71,175,61,0.65);
+}

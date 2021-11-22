@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
@@ -11,33 +12,57 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.media.MediaView?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="space.nasa.spaceapi.controllers.apodController">
+<AnchorPane cache="true" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="space.nasa.spaceapi.controllers.apodController">
    <children>
       <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
             <VBox alignment="CENTER" maxHeight="-Infinity" prefHeight="50.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="title" text="Label" />
-                  <Label fx:id="date" text="Label" />
-                  <Label fx:id="copyright" text="Label" />
+                  <Label fx:id="title" styleClass="h2" text="Label" />
+                  <Label fx:id="date" styleClass="h4" text="Label" />
+                  <Label fx:id="copyright" styleClass="h5" text="Label" />
                </children>
             </VBox>
          </top>
          <left>
-            <Button mnemonicParsing="false" onAction="#prev" prefHeight="250.0" prefWidth="75.0" text="Back" BorderPane.alignment="CENTER" />
+            <Button mnemonicParsing="false" onAction="#prev" prefHeight="250.0" prefWidth="75.0" text="Back" BorderPane.alignment="CENTER">
+               <styleClass>
+                  <String fx:value="btn" />
+                  <String fx:value="btn-primary" />
+               </styleClass></Button>
          </left>
          <right>
-            <Button mnemonicParsing="false" onAction="#next" prefHeight="250.0" prefWidth="75.0" text="Next" BorderPane.alignment="CENTER" />
+            <Button mnemonicParsing="false" onAction="#next" prefHeight="250.0" prefWidth="75.0" text="Next" BorderPane.alignment="CENTER">
+               <styleClass>
+                  <String fx:value="btn" />
+                  <String fx:value="btn-primary" />
+               </styleClass></Button>
          </right>
          <bottom>
             <VBox alignment="CENTER" maxHeight="250.0" prefHeight="200.0" spacing="5.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="explanation" alignment="CENTER" contentDisplay="CENTER" minHeight="75.0" minWidth="100.0" prefHeight="150.0" text="Label" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS" wrapText="true" VBox.vgrow="ALWAYS" />
+                  <Label fx:id="explanation" alignment="CENTER" contentDisplay="CENTER" minHeight="75.0" minWidth="100.0" prefHeight="150.0" text="Label" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS" wrapText="true" VBox.vgrow="ALWAYS">
+                     <styleClass>
+                        <String fx:value="text" />
+                        <String fx:value="text-info" />
+                     </styleClass>
+                     <font>
+                        <Font size="15.0" />
+                     </font></Label>
                   <HBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" spacing="35.0" VBox.vgrow="SOMETIMES">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#search" prefHeight="50.0" prefWidth="150.0" text="Search NASA's A.P.O.D." textAlignment="CENTER" wrapText="true" />
-                        <Button mnemonicParsing="false" onAction="#home" prefHeight="50.0" prefWidth="150.0" text="Home" textAlignment="CENTER" />
+                        <Button mnemonicParsing="false" onAction="#home" prefHeight="50.0" prefWidth="150.0" text="Home" textAlignment="CENTER">
+                           <styleClass>
+                              <String fx:value="btn" />
+                              <String fx:value="btn-default" />
+                           </styleClass></Button>
+                        <Button mnemonicParsing="false" onAction="#search" prefHeight="50.0" prefWidth="150.0" text="Search NASA's A.P.O.D." textAlignment="CENTER" wrapText="true">
+                           <styleClass>
+                              <String fx:value="btn" />
+                              <String fx:value="btn-default" />
+                           </styleClass></Button>
                      </children>
                   </HBox>
                </children>

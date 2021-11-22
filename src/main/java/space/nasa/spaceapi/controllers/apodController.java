@@ -71,6 +71,7 @@ public class apodController implements Initializable{
 		if(apod == null)
 			apod = API.getAPOD();
 		updateAPOD();
+		Transition.addStyle(date);
 	}
 	
 	private void updateAPOD(){

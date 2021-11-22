@@ -1,15 +1,21 @@
 package space.nasa.spaceapi.controllers;
 
+import com.dlsc.formsfx.model.validators.*;
+import eu.hansolo.tilesfx.Tile;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import org.kordamp.bootstrapfx.BootstrapFX;
 import space.nasa.spaceapi.models.APOD;
 import space.nasa.spaceapi.utilities.API;
 import space.nasa.spaceapi.utilities.Transition;
 
+import javax.xml.validation.Validator;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -92,8 +98,9 @@ public class searchController implements Initializable{
 		start.setValue(rDate.minusDays(amount));
 		end.setValue(rDate);
 		date.setValue(getRandomDateInAPOD(0, 0));
+		Transition.addStyle(date);
+		
 	}
-	
 	public void addDateChecker(DatePicker datepicker){
 		//https://stackoverflow.com/a/53186959/16929246
 		datepicker.setDayCellFactory(param -> new DateCell(){
@@ -108,7 +115,7 @@ public class searchController implements Initializable{
 	public void selectAPOD(MouseEvent mouseEvent){
 		//https://stackoverflow.com/a/10950824/16929246
 		apods.setOnMouseClicked(mouse -> {
-			if(mouse.getButton().equals(MouseButton.PRIMARY) && mouse.getClickCount() == 2 && apods.getSelectionModel().getSelectedItems().size() !=0)
+			if(mouse.getButton().equals(MouseButton.PRIMARY) && mouse.getClickCount() == 2 && apods.getSelectionModel().getSelectedItems().size() != 0)
 			{
 				System.out.println(apods.getSelectionModel().getSelectedItems());
 				date.setValue(apods.getSelectionModel().getSelectedItem().getDate());
