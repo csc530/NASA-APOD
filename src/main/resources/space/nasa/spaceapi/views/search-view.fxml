@@ -13,14 +13,15 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="525.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="space.nasa.spaceapi.controllers.searchController">
 	<children>
 		<BorderPane prefHeight="525.0" prefWidth="750.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 			<bottom>
-				<VBox alignment="CENTER" prefHeight="50.0" spacing="15.0" BorderPane.alignment="CENTER">
+				<VBox alignment="CENTER" prefWidth="730.0" spacing="15.0" BorderPane.alignment="CENTER">
 					<children>
-						<Label fx:id="explanation" alignment="CENTER" contentDisplay="CENTER" minHeight="50.0" minWidth="100.0" text="Label" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS" wrapText="true" VBox.vgrow="ALWAYS" />
+						<Label fx:id="explanation" alignment="CENTER" contentDisplay="CENTER" minWidth="100.0" text="Label" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS" wrapText="true" VBox.vgrow="ALWAYS" />
 						<Button mnemonicParsing="false" onAction="#back" text="Button" />
 					</children>
 				</VBox>
@@ -29,63 +30,72 @@
 				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 			</padding>
          <top>
-						<Label fx:id="title" text="Search for an astronomy picture of the day" BorderPane.alignment="CENTER" />
+						<Label fx:id="title" styleClass="title" text="Search for an astronomy picture of the day" wrapText="true" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="25.0" />
+               </font></Label>
          </top>
          <center>
             <HBox alignment="CENTER" BorderPane.alignment="CENTER">
                <children>
-                  <VBox spacing="30.0" HBox.hgrow="SOMETIMES">
+                  <VBox prefWidth="365.0" spacing="30.0" HBox.hgrow="SOMETIMES">
                      <children>
-                        <VBox>
+                        <VBox alignment="CENTER" spacing="8.0">
                            <children>
-                              <Label text="Search for one day's A.P.O,D." />
-                              <HBox spacing="20.0">
+                              <Label styleClass="header" text="Search for one day's A.P.O,D." />
+                              <HBox alignment="CENTER" prefHeight="30.0">
                                  <children>
-                                    <Label contentDisplay="CENTER" text="Date" textAlignment="CENTER" HBox.hgrow="SOMETIMES" />
-                                    <DatePicker fx:id="date" HBox.hgrow="SOMETIMES" />
-                                    <Button mnemonicParsing="false" onAction="#search" text="Search" />
+                                    <Label alignment="CENTER" contentDisplay="CENTER" minHeight="30.0" minWidth="75.0" prefHeight="30.0" prefWidth="75.0" text="Date" textAlignment="CENTER" HBox.hgrow="SOMETIMES" />
+                                    <DatePicker fx:id="date" editable="false" minHeight="30.0" prefHeight="30.0" HBox.hgrow="SOMETIMES" />
                                  </children>
                               </HBox>
+                              <Button minHeight="30.0" mnemonicParsing="false" onAction="#search" prefHeight="30.0" text="Search" />
                            </children>
                         </VBox>
-                        <VBox>
+                        <VBox alignment="CENTER" spacing="8.0">
                            <children>
-                              <Label text="Random amount of A.P.O.D.s" />
-                              <HBox>
+                              <Label styleClass="header" text="Random amount of A.P.O.D.s" />
+                              <HBox alignment="CENTER">
                                  <children>
-                                    <Label text="Amount" />
-                                    <Spinner fx:id="count" />
-                                    <Button mnemonicParsing="false" onAction="#random" text="Randomize" />
+                                    <Label alignment="CENTER" minHeight="30.0" minWidth="75.0" prefHeight="30.0" prefWidth="75.0" text="Amount" HBox.hgrow="SOMETIMES" />
+                                    <Spinner fx:id="count" minHeight="30.0" prefHeight="30.0" />
                                  </children>
                               </HBox>
-                              <Label text="if the amount is 1 or less only one random A.P.O.D. will be returned" />
+                              <Label prefWidth="365.0" text="if the amount is 1 or less only one random A.P.O.D. will be returned" textAlignment="CENTER" wrapText="true">
+                                 <font>
+                                    <Font name="C059-Italic" size="13.0" />
+                                 </font></Label>
+                              <Button minHeight="30.0" mnemonicParsing="false" onAction="#random" prefHeight="30.0" text="Randomize" />
                            </children>
                         </VBox>
-                        <VBox>
+                        <VBox alignment="CENTER" spacing="8.0">
                            <children>
-                              <Label text="Seach A.P.O.D.s between a date" />
-                              <GridPane>
+                              <Label styleClass="header" text="Seach A.P.O.D.s between a date" />
+                              <GridPane alignment="CENTER" vgap="5.0">
                                 <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+                                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
                                 </columnConstraints>
                                 <rowConstraints>
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
-                                    <DatePicker fx:id="start" GridPane.columnIndex="1" />
-                                    <DatePicker fx:id="end" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                    <Label text="End date" GridPane.rowIndex="1" />
-                                    <Label text="Start date" />
+                                    <DatePicker fx:id="start" editable="false" minHeight="30.0" prefHeight="30.0" GridPane.columnIndex="1" />
+                                    <DatePicker fx:id="end" editable="false" minHeight="30.0" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <Label alignment="CENTER" minHeight="30.0" minWidth="75.0" prefHeight="30.0" prefWidth="75.0" text="End date" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                                    <Label alignment="CENTER" minHeight="30.0" minWidth="75.0" prefHeight="30.0" prefWidth="75.0" text="Start date" textAlignment="CENTER" GridPane.halignment="CENTER" />
                                  </children>
                               </GridPane>
-                              <Button mnemonicParsing="false" onAction="#rSearch" text="Search" />
+                              <Button minHeight="30.0" mnemonicParsing="false" onAction="#rSearch" prefHeight="30.0" text="Search" />
                            </children>
                         </VBox>
                      </children>
                   </VBox>
-                  <ListView fx:id="apods" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="SOMETIMES" />
+                  <ListView fx:id="apods" prefHeight="200.0" prefWidth="365.0" HBox.hgrow="SOMETIMES">
+                     <padding>
+                        <Insets bottom="5.0" top="5.0" />
+                     </padding></ListView>
                </children>
             </HBox>
          </center>
