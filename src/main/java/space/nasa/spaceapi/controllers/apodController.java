@@ -9,7 +9,9 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import space.nasa.spaceapi.models.APOD;
 import space.nasa.spaceapi.utilities.API;
+import space.nasa.spaceapi.utilities.Transition;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
@@ -32,7 +34,7 @@ public class apodController implements Initializable{
 	}
 	
 	@FXML
-	void back(ActionEvent event){
+	void prev(ActionEvent event){
 		if(apod.getDate().isEqual(searchController.minDate))
 			new Alert(Alert.AlertType.INFORMATION, "there are no images for NASA's astronomy picture of the day " +
 					"before " + searchController.minDate + ".", ButtonType.OK).show();
@@ -55,9 +57,13 @@ public class apodController implements Initializable{
 	}
 	
 	@FXML
-	void prev(ActionEvent event){
-		apod = API.getAPOD(apod.getDate().minusDays(1));
-		updateAPOD();
+	void home(ActionEvent event) throws IOException{
+		Transition.to(event,"home.fxml","NASA's APIs");
+	}
+	
+	@FXML
+	void search(ActionEvent event) throws IOException{
+		Transition.to(event,"search-view.fxml","Search NASA's Astronomy Picture of the Day API");
 	}
 	
 	@Override

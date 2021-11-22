@@ -7,11 +7,12 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.media.MediaView?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="525.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="space.nasa.spaceapi.controllers.apodController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="525.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="space.nasa.spaceapi.controllers.apodController">
    <children>
       <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -24,16 +25,21 @@
             </VBox>
          </top>
          <left>
-            <Button mnemonicParsing="false" onAction="#prev" prefWidth="75.0" text="Button" BorderPane.alignment="CENTER" />
+            <Button mnemonicParsing="false" onAction="#prev" prefHeight="250.0" prefWidth="75.0" text="Back" BorderPane.alignment="CENTER" />
          </left>
          <right>
-            <Button mnemonicParsing="false" onAction="#next" prefWidth="75.0" text="Button" BorderPane.alignment="CENTER" />
+            <Button mnemonicParsing="false" onAction="#next" prefHeight="250.0" prefWidth="75.0" text="Next" BorderPane.alignment="CENTER" />
          </right>
          <bottom>
-            <VBox alignment="CENTER" prefHeight="50.0" spacing="15.0" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER" spacing="15.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="explanation" alignment="CENTER" contentDisplay="CENTER" minHeight="50.0" minWidth="100.0" text="Label" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS" wrapText="true" VBox.vgrow="ALWAYS" />
-                  <Button mnemonicParsing="false" onAction="#back" text="Button" />
+                  <Label fx:id="explanation" alignment="CENTER" contentDisplay="CENTER" minWidth="100.0" text="Label" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS" wrapText="true" VBox.vgrow="ALWAYS" />
+                  <HBox alignment="CENTER" prefHeight="50.0" spacing="35.0" VBox.vgrow="SOMETIMES">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#search" prefHeight="50.0" prefWidth="150.0" text="Search NASA's A.P.O.D." textAlignment="CENTER" wrapText="true" />
+                        <Button mnemonicParsing="false" onAction="#home" prefHeight="50.0" prefWidth="150.0" text="Home" textAlignment="CENTER" />
+                     </children>
+                  </HBox>
                </children>
             </VBox>
          </bottom>
@@ -43,12 +49,12 @@
          <center>
             <StackPane BorderPane.alignment="CENTER">
                <children>
+                  <MediaView fx:id="video" fitHeight="200.0" fitWidth="200.0" visible="false" />
                   <ImageView fx:id="image" cache="true" fitHeight="325.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
                      <viewport>
                         <Rectangle2D />
                      </viewport>
                   </ImageView>
-                  <MediaView fx:id="video" fitHeight="200.0" fitWidth="200.0" visible="false" />
                </children>
             </StackPane>
          </center>
