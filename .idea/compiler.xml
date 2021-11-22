@@ -14,4 +14,9 @@
       <module name="spaceapi" target="17" />
     </bytecodeTargetLevel>
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="spaceAPI" options="--add-exports javafx.controls/javafx=space.nasa.spaceapi" />
+    </option>
+  </component>
 </project>

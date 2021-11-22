@@ -4,6 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import space.nasa.spaceapi.models.APOD;
 import space.nasa.spaceapi.utilities.API;
 import space.nasa.spaceapi.utilities.Transition;
@@ -15,6 +17,8 @@ import java.util.ResourceBundle;
 
 public class searchController implements Initializable{
 	public static final LocalDate minDate = LocalDate.parse("1995-06-16");
+	@FXML
+	private Button btnSearch;
 	@FXML
 	private Label explanation;
 	@FXML
@@ -66,7 +70,7 @@ public class searchController implements Initializable{
 		{
 			rDate = getRandomDateInAPOD(countValue, 0);
 			//minus 1 to account that start date count as one as well as end date
-			apods.getItems().addAll(API.getAPODs(rDate, rDate.plusDays(countValue-1)));
+			apods.getItems().addAll(API.getAPODs(rDate, rDate.plusDays(countValue - 1)));
 		}
 	}
 	
@@ -74,12 +78,12 @@ public class searchController implements Initializable{
 	void search(ActionEvent event) throws IOException{
 		final APOD apod = API.getAPOD(date.getValue());
 		apodController.setApod(apod);
-		Transition.to(event, "apod-view.fxml", apod.getTitle()+" - "+apod.getDate());
+		Transition.to(event, "apod-view.fxml", apod.getTitle() + " - " + apod.getDate());
 	}
 	
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle){
-		int amount = (int) (Math.random()*7);
+		int amount = (int) (Math.random() * 7);
 		LocalDate rDate = getRandomDateInAPOD(0, amount);
 		count.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 1));
 		addDateChecker(start);
@@ -99,5 +103,21 @@ public class searchController implements Initializable{
 				setDisable(item.isAfter(LocalDate.now()) || item.isBefore(minDate));
 			}
 		});
+	}
+	
+	public void selectAPOD(MouseEvent mouseEvent){
+		//https://stackoverflow.com/a/10950824/16929246
+		apods.setOnMouseClicked(mouse -> {
+			if(mouse.getButton().equals(MouseButton.PRIMARY) && mouse.getClickCount() == 2 && apods.getSelectionModel().getSelectedItems().size() !=0)
+			{
+				System.out.println(apods.getSelectionModel().getSelectedItems());
+				date.setValue(apods.getSelectionModel().getSelectedItem().getDate());
+				btnSearch.fire();
+			}
+		});
+	}
+	
+	public void Exit(ActionEvent actionEvent){
+		Transition.close(actionEvent);
 	}
 }
