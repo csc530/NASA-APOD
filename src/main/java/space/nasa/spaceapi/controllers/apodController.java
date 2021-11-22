@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class apodController implements Initializable{
+	private static APOD apod;
 	@FXML
 	private Label title;
 	@FXML
@@ -25,7 +26,6 @@ public class apodController implements Initializable{
 	private ImageView image;
 	@FXML
 	private Label explanation;
-	private static APOD apod;
 	
 	public static void setApod(APOD apod){
 		apodController.apod = apod;
@@ -33,6 +33,14 @@ public class apodController implements Initializable{
 	
 	@FXML
 	void back(ActionEvent event){
+		if(apod.getDate().isEqual(searchController.minDate))
+			new Alert(Alert.AlertType.INFORMATION, "there are no images for NASA's astronomy picture of the day " +
+					"before " + searchController.minDate + ".", ButtonType.OK).show();
+		else
+		{
+			apod = API.getAPOD(apod.getDate().minusDays(1));
+			updateAPOD();
+		}
 	}
 	
 	@FXML
@@ -54,7 +62,8 @@ public class apodController implements Initializable{
 	
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle){
-		apod = API.getAPOD();
+		if(apod == null)
+			apod = API.getAPOD();
 		updateAPOD();
 	}
 	

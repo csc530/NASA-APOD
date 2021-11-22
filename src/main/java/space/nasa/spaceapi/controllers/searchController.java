@@ -72,8 +72,9 @@ public class searchController implements Initializable{
 	
 	@FXML
 	void search(ActionEvent event) throws IOException{
-		Transition.to(event, "apod-view.fxml", "");
-		apodController.setApod(API.getAPOD(date.getValue()));
+		final APOD apod = API.getAPOD(date.getValue());
+		apodController.setApod(apod);
+		Transition.to(event, "apod-view.fxml", apod.getTitle()+" - "+apod.getDate());
 	}
 	
 	@Override
