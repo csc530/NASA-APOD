@@ -16,8 +16,8 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-public class apodController implements Initializable{
-	private static APOD apod;
+public class apodController implements InitializableAPOD, Initializable{
+	private APOD apod;
 	@FXML
 	private Label title;
 	@FXML
@@ -28,10 +28,6 @@ public class apodController implements Initializable{
 	private ImageView image;
 	@FXML
 	private Label explanation;
-	
-	public static void setApod(APOD apod){
-		apodController.apod = apod;
-	}
 	
 	@FXML
 	void prev(ActionEvent event){
@@ -58,19 +54,16 @@ public class apodController implements Initializable{
 	
 	@FXML
 	void home(ActionEvent event) throws IOException{
-		Transition.to(event,"home.fxml","NASA's APIs");
+		Transition.to(event, "home.fxml", "NASA's APIs");
 	}
 	
 	@FXML
 	void search(ActionEvent event) throws IOException{
-		Transition.to(event,"search-view.fxml","Search NASA's Astronomy Picture of the Day API");
+		Transition.to(event, "search-view.fxml", "Search NASA's Astronomy Picture of the Day API");
 	}
 	
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle){
-		if(apod == null)
-			apod = API.getAPOD();
-		updateAPOD();
 		Transition.addStyle(date);
 	}
 	
@@ -80,5 +73,11 @@ public class apodController implements Initializable{
 		image.setImage(apod.getImage());
 		date.setText(apod.getDateString());
 		copyright.setText(apod.getCopyright());
+	}
+	
+	@Override
+	public void initializeAPOD(APOD apod){
+		this.apod = apod;
+		updateAPOD();
 	}
 }

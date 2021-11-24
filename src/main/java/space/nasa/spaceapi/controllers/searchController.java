@@ -1,21 +1,15 @@
 package space.nasa.spaceapi.controllers;
 
-import com.dlsc.formsfx.model.validators.*;
-import eu.hansolo.tilesfx.Tile;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import org.kordamp.bootstrapfx.BootstrapFX;
 import space.nasa.spaceapi.models.APOD;
 import space.nasa.spaceapi.utilities.API;
 import space.nasa.spaceapi.utilities.Transition;
 
-import javax.xml.validation.Validator;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -83,24 +77,28 @@ public class searchController implements Initializable{
 	@FXML
 	void search(ActionEvent event) throws IOException{
 		final APOD apod = API.getAPOD(date.getValue());
-		apodController.setApod(apod);
-		Transition.to(event, "apod-view.fxml", apod.getTitle() + " - " + apod.getDate());
+		Transition.to(event, "apod-view.fxml", apod.getTitle() + " - " + apod.getDate(), apod);
 	}
 	
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle){
 		int amount = (int) (Math.random() * 7);
 		LocalDate rDate = getRandomDateInAPOD(0, amount);
-		count.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 1));
+		count.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 150, 1));
+		//replace all non numeric from editor
+		count.editableProperty().setValue(true);
+		count.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+		});
 		addDateChecker(start);
 		addDateChecker(date);
 		addDateChecker(end);
 		start.setValue(rDate.minusDays(amount));
 		end.setValue(rDate);
 		date.setValue(getRandomDateInAPOD(0, 0));
-		Transition.addStyle(date);
+		Transition.addStyle(apods);
 		
 	}
+	
 	public void addDateChecker(DatePicker datepicker){
 		//https://stackoverflow.com/a/53186959/16929246
 		datepicker.setDayCellFactory(param -> new DateCell(){
@@ -117,7 +115,6 @@ public class searchController implements Initializable{
 		apods.setOnMouseClicked(mouse -> {
 			if(mouse.getButton().equals(MouseButton.PRIMARY) && mouse.getClickCount() == 2 && apods.getSelectionModel().getSelectedItems().size() != 0)
 			{
-				System.out.println(apods.getSelectionModel().getSelectedItems());
 				date.setValue(apods.getSelectionModel().getSelectedItem().getDate());
 				btnSearch.fire();
 			}
