@@ -3,6 +3,7 @@ package space.nasa.spaceapi.models;
 import com.google.gson.annotations.SerializedName;
 import javafx.scene.image.Image;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.time.LocalDate;
@@ -24,9 +25,9 @@ public class APOD{
 	@SerializedName("thumbnail_url")
 	private URL thumbnail;
 	private String title;
-	private URL url;
-	
-	public APOD(){}
+	//it was a URL but there are some malformed returned URLs from the API and there was no way to validate them
+	// before an object is instantiated and crashes the program
+	private String url;
 	
 	public URL getThumbnail(){
 		return thumbnail;
@@ -35,7 +36,6 @@ public class APOD{
 	public LocalDate getDate(){
 		//i need to convert to lacaldate instead of maikng the datatype local date because java.time module "doEsn'T
 		// oPeN tO th gson
-		
 		//Converts date which opens to gson to LocalDate (which doesn't) so subtract and add and better functions can be performed
 		// divide 60 60 24 to convert the epochSecond to epoch Day for the method to work correctly
 		return LocalDate.ofEpochDay(date.toInstant().getEpochSecond() / 60 / 60 / 24);
@@ -62,18 +62,27 @@ public class APOD{
 	}
 	
 	public URL getUrl(){
-		return url;
+		try
+		{
+			if(url.contains("https://"))
+				return new URL(url);
+			return new URL("https:"+url);
+		}
+		catch(MalformedURLException e)
+		{
+			return null;
+		}
 	}
 	
 	public Image getImage(){
 		if(mediaType.equals(mediaTypes[0]))
 			return new Image(String.valueOf(thumbnail));
-		URL imgUrl = (hdUrl == null) ? url : hdUrl;
+		URL imgUrl = (hdUrl == null) ? getUrl() : hdUrl;
 		return new Image(imgUrl.toString());
 	}
 	
 	public URL getVideo(){
-		return mediaType.equals(mediaTypes[1]) ? null : url;
+		return mediaType.equals(mediaTypes[1]) ? null : getUrl();
 	}
 	
 	public String getDateString(){
