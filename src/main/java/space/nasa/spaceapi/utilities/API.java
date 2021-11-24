@@ -16,18 +16,17 @@ import java.util.LinkedHashSet;
 public class API{
 	private static final Gson gson = new Gson();
 	private static final HttpClient client = HttpClient.newHttpClient();
-	private static final String key = "1rp568Tl7gR9976UiFzaPbedFvxnBFFYbdqxXazV";
-	private static final String uri = "https://api.nasa.gov/planetary/apod?thumbs=true&api_key=" + key;
+	private static final String uri = "https://api.nasa.gov/planetary/apod?thumbs=true&api_key=1rp568Tl7gR9976UiFzaPbedFvxnBFFYbdqxXazV";
 	
 	public static APOD getAPOD(){
-		return getApod(uri);
+		return getAPOD(uri);
 	}
 	
 	public static APOD getAPOD(LocalDate date){
-		return getApod(uri + "&date=" + date);
+		return getAPOD(uri + "&date=" + date);
 	}
 	
-	public static APOD getApod(String uri){
+	public static APOD getAPOD(String uri){
 		HttpRequest request = HttpRequest.newBuilder().uri(URI.create(uri)).build();
 		try
 		{
@@ -52,7 +51,7 @@ public class API{
 		catch(IOException | InterruptedException e)
 		{
 			e.printStackTrace();
-			return new LinkedHashSet<APOD>(){};
+			return new LinkedHashSet<>();
 		}
 	}
 }

@@ -56,7 +56,10 @@ public class searchController implements Initializable{
 	@FXML
 	void rSearch(ActionEvent event){
 		apods.getItems().clear();
+		if(start.getValue().isBefore(end.getValue()))
 		apods.getItems().addAll((API.getAPODs(start.getValue(), end.getValue())));
+		else
+			new Alert(Alert.AlertType.ERROR, "Start date must be before the end date",ButtonType.OK).show();
 	}
 	
 	@FXML
