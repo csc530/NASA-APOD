@@ -11,6 +11,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashSet;
 
 public class API{
@@ -42,7 +43,34 @@ public class API{
 	
 	public static LinkedHashSet<APOD> getAPODs(LocalDate start, LocalDate end){
 		Type typeOf = new TypeToken<LinkedHashSet<APOD>>(){}.getType();
-		HttpRequest request = HttpRequest.newBuilder().uri(URI.create(uri + "&start_date=" + start + "&end_date=" + end)).build();
+		//break up requests for many apods
+		long days = ChronoUnit.DAYS.between(Tstart, end.plusDays(0));
+		//System.out.println("Days: "+days);
+		//System.out.println("Start: " + start + " End: " +end);
+		if(days > 50)
+		{
+			LinkedHashSet<APOD> apods = new LinkedHashSet<APOD>();
+			final LocalDate Tstart = Tstart;
+			Thread main = new Thread(() -> {
+				
+				for(long i = 0; i < ((days / 50) + 1); i++)
+				{
+					Tstart = Tstart.plusDays(50 * i);
+					System.out.println(Tstart + " : " + i + " : " + Tstart.plusDays(50));
+					LocalDate finalStart = Tstart;
+					new Thread(() -> {
+						if(finalStart.isAfter(end))
+							apods.add(getAPOD(end));
+						else
+							apods.addAll(getAPODs(finalStart, finalStart.plusDays(50)));
+						System.out.println(apods.size());
+					});
+				}
+				System.out.println(Tstart);
+			});
+			return apods;
+		}
+		HttpRequest request = HttpRequest.newBuilder().uri(URI.create(uri + "&start_date=" + Tstart + "&end_date=" + end)).build();
 		try
 		{
 			String response = client.send(request, HttpResponse.BodyHandlers.ofString()).body();
