@@ -29,6 +29,26 @@ public class APOD{
 	// before an object is instantiated and crashes the program
 	private String url;
 	
+	@Override
+	public boolean equals(Object obj){
+		if(obj.getClass().equals(this.getClass()))
+		{
+			APOD apod = (APOD) obj;
+			return apod.getDate().isEqual(this.getDate()) && apod.getTitle().equals(this.getTitle());
+		}
+		return false;
+	}
+	
+	@Override
+	public String toString(){
+		StringJoiner joiner = new StringJoiner(" ", "", "...");
+		String[] s = explanation.split(" ");
+		//if they add 5 elements or reach the end of the description string
+		for(int i = 0; (i < 5) && (i < s.length); i++)
+			joiner.add(s[i]);
+		return "%s\n%s\n%s\n".formatted(getDateString(), title, joiner.toString());
+	}
+	
 	public URL getThumbnail(){
 		return thumbnail;
 	}
@@ -42,7 +62,7 @@ public class APOD{
 	}
 	
 	public String getExplanation(){
-		return explanation;
+		return explanation.trim();
 	}
 	
 	public URL getHdUrl(){
@@ -58,7 +78,7 @@ public class APOD{
 	}
 	
 	public String getTitle(){
-		return title;
+		return title.trim();
 	}
 	
 	public URL getUrl(){
@@ -66,7 +86,7 @@ public class APOD{
 		{
 			if(url.contains("https://"))
 				return new URL(url);
-			return new URL("https:"+url);
+			return new URL("https:" + url);
 		}
 		catch(MalformedURLException e)
 		{
@@ -87,15 +107,5 @@ public class APOD{
 	
 	public String getDateString(){
 		return DateFormat.getDateInstance(DateFormat.FULL, Locale.getDefault()).format(date);
-	}
-	
-	@Override
-	public String toString(){
-		StringJoiner joiner = new StringJoiner(" ", "", "...");
-		String[] s = explanation.split(" ");
-		//if they add 5 elements or reach the end of the description string
-		for(int i = 0; (i < 5) && (i < s.length); i++)
-			joiner.add(s[i]);
-		return "%s\n%s\n%s\n".formatted(getDateString(), title, joiner.toString());
 	}
 }

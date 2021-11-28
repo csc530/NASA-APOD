@@ -13,6 +13,7 @@ import space.nasa.spaceapi.utilities.Transition;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.*;
 import java.util.ResourceBundle;
 
 public class searchController implements Initializable{
@@ -56,8 +57,12 @@ public class searchController implements Initializable{
 	@FXML
 	void rSearch(ActionEvent event){
 		apods.getItems().clear();
-		if(start.getValue().isBefore(end.getValue()))
-		apods.getItems().addAll((API.getAPODs(start.getValue(), end.getValue())));
+		if(start.getValue().isBefore(end.getValue()) || start.getValue().isEqual(end.getValue()))
+		{
+			Set<APOD> a = API.getAPODs(start.getValue(),end.getValue());
+			System.out.println(a.stream().distinct().count()+"\n"+a.size());
+			apods.getItems().addAll(a);
+		}
 		else
 			new Alert(Alert.AlertType.ERROR, "Start date must be before the end date",ButtonType.OK).show();
 	}
