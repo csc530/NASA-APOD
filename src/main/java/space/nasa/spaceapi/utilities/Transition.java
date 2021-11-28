@@ -31,7 +31,7 @@ public class Transition{
 			final InitializableAPOD controller = to(event, fxmlFile, title).getController();
 			controller.initializeAPOD(apod);
 		}
-		catch(IOException | RuntimeException ignored){}
+		catch(IOException | RuntimeException ignored) {}
 	}
 	
 	public static void close(ActionEvent event){

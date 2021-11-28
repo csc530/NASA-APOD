@@ -13,8 +13,8 @@ import space.nasa.spaceapi.utilities.Transition;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.*;
 import java.util.ResourceBundle;
+import java.util.TreeSet;
 
 public class searchController implements Initializable{
 	public static final LocalDate minDate = LocalDate.parse("1995-06-16");
@@ -59,12 +59,16 @@ public class searchController implements Initializable{
 		apods.getItems().clear();
 		if(start.getValue().isBefore(end.getValue()) || start.getValue().isEqual(end.getValue()))
 		{
-			Set<APOD> a = API.getAPODs(start.getValue(),end.getValue());
-			System.out.println(a.stream().distinct().count()+"\n"+a.size());
-			apods.getItems().addAll(a);
+			Thread getAPODs;
+			Thread loading;
+			TreeSet<APOD> a = API.getAPODs(start.getValue(), end.getValue());
+			if(a != null)
+				apods.getItems().addAll(a);
+			else
+				new Alert(Alert.AlertType.ERROR, "Sorry something went wrong, please try again.").show();
 		}
 		else
-			new Alert(Alert.AlertType.ERROR, "Start date must be before the end date",ButtonType.OK).show();
+			new Alert(Alert.AlertType.WARNING, "Start date must be before the end date", ButtonType.OK).show();
 	}
 	
 	@FXML

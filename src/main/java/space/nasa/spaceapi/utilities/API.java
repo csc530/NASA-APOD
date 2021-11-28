@@ -13,6 +13,7 @@ import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashSet;
+import java.util.TreeSet;
 
 public class API{
 	private static final Gson gson = new Gson();
@@ -41,24 +42,26 @@ public class API{
 		}
 	}
 	
-	public static LinkedHashSet<APOD> getAPODs(LocalDate start, LocalDate end){
+	public static TreeSet<APOD> getAPODs(LocalDate start, LocalDate end){
 		Type typeOf = new TypeToken<LinkedHashSet<APOD>>(){}.getType();
 		//break up requests for many apods
 		long days = ChronoUnit.DAYS.between(start, end);
 		if(days > 50)
 		{
-			LinkedHashSet<APOD> apods = new LinkedHashSet<>();
+			TreeSet<APOD> apods = new TreeSet<>();
 			for(long i = 0; i < ((days / 50) + 1); i++)
 			{
+				//access the start date, must be final, so it doesn't change when accessed by thread
 				final LocalDate threadStart = start.plusDays(50 * i);
+				//async thread to call numbered amount of APODs query
 				Thread query = new Thread(() -> {
 					if(threadStart.isAfter(end))
 						apods.add(getAPOD(end));
 					else
 						apods.addAll(getAPODs(threadStart, threadStart.plusDays(50)));
-					System.out.println(apods.size());
 				});
 				query.start();
+				//wait for the query to complete
 				try {query.join();}
 				catch(InterruptedException e) {return null;}
 			}
