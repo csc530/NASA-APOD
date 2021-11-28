@@ -12,13 +12,13 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.LinkedHashSet;
 import java.util.TreeSet;
 
 public class API{
 	private static final Gson gson = new Gson();
 	private static final HttpClient client = HttpClient.newHttpClient();
 	private static final String uri = "https://api.nasa.gov/planetary/apod?thumbs=true&api_key=1rp568Tl7gR9976UiFzaPbedFvxnBFFYbdqxXazV";
+	private static float progress = 0.00F;
 	
 	public static APOD getAPOD(){
 		return getAPOD(uri);
@@ -29,6 +29,7 @@ public class API{
 	}
 	
 	public static APOD getAPOD(String uri){
+		progress = 0;
 		HttpRequest request = HttpRequest.newBuilder().uri(URI.create(uri)).build();
 		try
 		{
@@ -40,14 +41,27 @@ public class API{
 			e.printStackTrace();
 			return new APOD();
 		}
+		finally
+		{
+			progress = 100;
+		}
+	}
+	
+	public static float getProgress(){
+		return progress;
+	}
+	
+	public static void setProgress(float progress){
+		API.progress = progress;
 	}
 	
 	public static TreeSet<APOD> getAPODs(LocalDate start, LocalDate end){
-		Type typeOf = new TypeToken<LinkedHashSet<APOD>>(){}.getType();
+		Type typeOf = new TypeToken<TreeSet<APOD>>(){}.getType();
 		//break up requests for many apods
 		long days = ChronoUnit.DAYS.between(start, end);
 		if(days > 50)
 		{
+			progress = 0;
 			TreeSet<APOD> apods = new TreeSet<>();
 			for(long i = 0; i < ((days / 50) + 1); i++)
 			{
@@ -59,6 +73,7 @@ public class API{
 						apods.add(getAPOD(end));
 					else
 						apods.addAll(getAPODs(threadStart, threadStart.plusDays(50)));
+					progress = (float) apods.size() / days;
 				});
 				query.start();
 				//wait for the query to complete

@@ -1,11 +1,15 @@
 package space.nasa.spaceapi.controllers;
 
+import com.dlsc.formsfx.model.validators.IntegerRangeValidator;
+import com.dlsc.formsfx.model.validators.RegexValidator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import space.nasa.spaceapi.models.APOD;
 import space.nasa.spaceapi.utilities.API;
 import space.nasa.spaceapi.utilities.Transition;
@@ -14,16 +18,15 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.TreeSet;
 
 public class searchController implements Initializable{
 	public static final LocalDate minDate = LocalDate.parse("1995-06-16");
 	@FXML
+	private ProgressBar progress;
+	@FXML
 	private Button btnSearch;
-	@FXML
-	private Label explanation;
-	@FXML
-	private Label title;
 	@FXML
 	private DatePicker date;
 	@FXML
@@ -33,7 +36,8 @@ public class searchController implements Initializable{
 	@FXML
 	private DatePicker end;
 	@FXML
-	private ListView<APOD> apods;
+	private ListView<APOD> apods; @FXML
+	private VBox controls;
 	
 	/**
 	 * Returns a random valid LocalDate which an astronmy picture of the day was posted
@@ -55,20 +59,35 @@ public class searchController implements Initializable{
 	}
 	
 	@FXML
-	void rSearch(ActionEvent event){
+	void rSearch(ActionEvent event) throws InterruptedException{
 		apods.getItems().clear();
-		if(start.getValue().isBefore(end.getValue()) || start.getValue().isEqual(end.getValue()))
-		{
-			Thread getAPODs;
-			Thread loading;
-			TreeSet<APOD> a = API.getAPODs(start.getValue(), end.getValue());
-			if(a != null)
-				apods.getItems().addAll(a);
+		progress.setVisible(true);
+		Thread query = new Thread(() -> {
+			if(start.getValue().isBefore(end.getValue()) || start.getValue().isEqual(end.getValue()))
+			{
+				TreeSet<APOD> results = API.getAPODs(start.getValue(), end.getValue());
+				API.setProgress(100);
+				controls.setDisable(false);
+				if(results != null)
+					apods.getItems().addAll(results);
+				else
+					new Alert(Alert.AlertType.ERROR, "Sorry something went wrong, please try again.").show();
+			}
 			else
-				new Alert(Alert.AlertType.ERROR, "Sorry something went wrong, please try again.").show();
-		}
-		else
-			new Alert(Alert.AlertType.WARNING, "Start date must be before the end date", ButtonType.OK).show();
+				new Alert(Alert.AlertType.WARNING, "Start date must be before the end date", ButtonType.OK).show();
+			progress.setVisible(false);
+		});
+		controls.setDisable(true);
+		Thread loading = new Thread(() -> {
+			progress.setDisable(false);
+			progress.getStyleClass().remove("progress-bar-success");
+			while(API.getProgress() < 100)
+				progress.progressProperty().setValue(API.getProgress());
+			progress.getStyleClass().add("progress-bar-success");
+		});
+		query.start();
+		loading.start();
+		apods.requestFocus();
 	}
 	
 	@FXML
@@ -81,8 +100,10 @@ public class searchController implements Initializable{
 		else
 		{
 			rDate = getRandomDateInAPOD(countValue, 0);
-			//minus 1 to account that start date count as one as well as end date
-			apods.getItems().addAll(API.getAPODs(rDate, rDate.plusDays(countValue - 1)));
+			Set<APOD> results = API.getAPODs(rDate, rDate.plusDays(countValue - 1));
+			if(results != null)
+				//minus 1 to account that start date count as one as well as end date
+				apods.getItems().addAll(results);
 		}
 	}
 	
@@ -94,12 +115,17 @@ public class searchController implements Initializable{
 	
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle){
+		progress.setVisible(false);
 		int amount = (int) (Math.random() * 7);
 		LocalDate rDate = getRandomDateInAPOD(0, amount);
 		count.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 150, 1));
 		//replace all non numeric from editor
 		count.editableProperty().setValue(true);
 		count.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+			if(!RegexValidator.forPattern("[^0-9]", "Eyo").validate(newValue).getResult())
+				count.getEditor().setText(newValue.replaceAll("[^0-9]", ""));
+			if(!IntegerRangeValidator.between(1, 500, "Ayo").validate(Integer.valueOf(newValue)).getResult())
+				count.getValueFactory().setValue(Integer.parseInt(oldValue));
 		});
 		addDateChecker(start);
 		addDateChecker(date);
@@ -108,7 +134,6 @@ public class searchController implements Initializable{
 		end.setValue(rDate);
 		date.setValue(getRandomDateInAPOD(0, 0));
 		Transition.addStyle(apods);
-		
 	}
 	
 	public void addDateChecker(DatePicker datepicker){
