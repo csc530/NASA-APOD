@@ -2,9 +2,11 @@ package space.nasa.spaceapi.utilities;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 import space.nasa.spaceapi.models.APOD;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.http.HttpClient;

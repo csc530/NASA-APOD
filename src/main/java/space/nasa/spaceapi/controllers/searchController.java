@@ -8,7 +8,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import space.nasa.spaceapi.models.APOD;
 import space.nasa.spaceapi.utilities.API;
@@ -36,7 +35,8 @@ public class searchController implements Initializable{
 	@FXML
 	private DatePicker end;
 	@FXML
-	private ListView<APOD> apods; @FXML
+	private ListView<APOD> apods;
+	@FXML
 	private VBox controls;
 	
 	/**
@@ -59,7 +59,7 @@ public class searchController implements Initializable{
 	}
 	
 	@FXML
-	void rSearch(ActionEvent event) throws InterruptedException{
+	void rSearch(ActionEvent event) throws IllegalStateException{
 		apods.getItems().clear();
 		progress.setVisible(true);
 		Thread query = new Thread(() -> {
@@ -81,8 +81,12 @@ public class searchController implements Initializable{
 		Thread loading = new Thread(() -> {
 			progress.setDisable(false);
 			progress.getStyleClass().remove("progress-bar-success");
+			float i = 0;
 			while(API.getProgress() < 100)
-				progress.progressProperty().setValue(API.getProgress());
+			{
+				progress.progressProperty().setValue(API.getProgress()+i);
+				i += .0001;
+			}
 			progress.getStyleClass().add("progress-bar-success");
 		});
 		query.start();
@@ -108,7 +112,7 @@ public class searchController implements Initializable{
 	}
 	
 	@FXML
-	void search(ActionEvent event) throws IOException{
+	void search(ActionEvent event){
 		final APOD apod = API.getAPOD(date.getValue());
 		Transition.to(event, "apod-view.fxml", apod.getTitle() + " - " + apod.getDate(), apod);
 	}

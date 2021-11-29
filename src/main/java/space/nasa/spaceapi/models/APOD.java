@@ -23,7 +23,7 @@ public class APOD implements Comparable<APOD>{
 	private String mediaType;
 	private String copyright;
 	@SerializedName("thumbnail_url")
-	private URL thumbnail;
+	private String thumbnail;
 	private String title;
 	//it was a URL but there are some malformed returned URLs from the API and there was no way to validate them
 	// before an object is instantiated and crashes the program
@@ -50,7 +50,8 @@ public class APOD implements Comparable<APOD>{
 	}
 	
 	public URL getThumbnail(){
-		return thumbnail;
+		try {return new URL(thumbnail);}
+		catch(MalformedURLException e) {return null;}
 	}
 	
 	public LocalDate getDate(){
@@ -134,7 +135,7 @@ public class APOD implements Comparable<APOD>{
 	 * @throws ClassCastException   if the specified object's type prevents it
 	 *                              from being compared to this object.
 	 * @apiNote It is strongly recommended, but <i>not</i> strictly required that
-	 *                {@code (x.compareTo(y)==0) == (x.equals(y))}.  Generally speaking, any
+	 *        {@code (x.compareTo(y)==0) == (x.equals(y))}.  Generally speaking, any
 	 * 		class that implements the {@code Comparable} interface and violates
 	 * 		this condition should clearly indicate this fact.  The recommended
 	 * 		language is "Note: this class has a natural ordering that is
