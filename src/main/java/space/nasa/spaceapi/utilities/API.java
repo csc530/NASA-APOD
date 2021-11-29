@@ -31,7 +31,7 @@ public class API{
 	}
 	
 	public static APOD getAPOD(String uri){
-		progress = 0;
+		//progress = 0;
 		HttpRequest request = HttpRequest.newBuilder().uri(URI.create(uri)).build();
 		try
 		{
@@ -42,10 +42,6 @@ public class API{
 		{
 			e.printStackTrace();
 			return new APOD();
-		}
-		finally
-		{
-			progress = 100;
 		}
 	}
 	

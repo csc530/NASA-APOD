@@ -31,7 +31,7 @@ public class APOD implements Comparable<APOD>{
 	
 	@Override
 	public boolean equals(Object obj){
-		if(obj.getClass().equals(this.getClass()))
+		if(obj != null && obj.getClass().equals(this.getClass()))
 		{
 			APOD apod = (APOD) obj;
 			return apod.getDate().isEqual(this.getDate()) && apod.getTitle().equals(this.getTitle());

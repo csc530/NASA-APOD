@@ -13,11 +13,9 @@ import space.nasa.spaceapi.models.APOD;
 import space.nasa.spaceapi.utilities.API;
 import space.nasa.spaceapi.utilities.Transition;
 
-import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.TreeSet;
 
 public class searchController implements Initializable{
@@ -62,53 +60,72 @@ public class searchController implements Initializable{
 	void rSearch(ActionEvent event) throws IllegalStateException{
 		apods.getItems().clear();
 		progress.setVisible(true);
-		Thread query = new Thread(() -> {
-			if(start.getValue().isBefore(end.getValue()) || start.getValue().isEqual(end.getValue()))
-			{
-				TreeSet<APOD> results = API.getAPODs(start.getValue(), end.getValue());
-				API.setProgress(100);
-				controls.setDisable(false);
-				if(results != null)
-					apods.getItems().addAll(results);
-				else
-					new Alert(Alert.AlertType.ERROR, "Sorry something went wrong, please try again.").show();
-			}
-			else
-				new Alert(Alert.AlertType.WARNING, "Start date must be before the end date", ButtonType.OK).show();
-			progress.setVisible(false);
-		});
 		controls.setDisable(true);
-		Thread loading = new Thread(() -> {
+		//Thread query
+		if(start.getValue().isBefore(end.getValue()) || start.getValue().isEqual(end.getValue()))
+		{
+			TreeSet<APOD> results = API.getAPODs(start.getValue(), end.getValue());
+			API.setProgress(100);
+			controls.setDisable(false);
+			if(results != null)
+				apods.getItems().addAll(results);
+			else
+				new Alert(Alert.AlertType.ERROR, "Sorry something went wrong, please try again.").show();
+		}
+		else
+			new Thread(() -> {
+				{new Alert(Alert.AlertType.WARNING, "Start date must be before the end date", ButtonType.OK).show();}
+				progress.setVisible(false);
+			}).start();
+		//Thread loading
+		new Thread(() -> {
 			progress.setDisable(false);
 			progress.getStyleClass().remove("progress-bar-success");
 			float i = 0;
-			while(API.getProgress() < 100)
+			while(API.getProgress() < 1)
 			{
-				progress.progressProperty().setValue(API.getProgress()+i);
+				progress.progressProperty().setValue(API.getProgress() + i);
 				i += .0001;
 			}
 			progress.getStyleClass().add("progress-bar-success");
-		});
-		query.start();
-		loading.start();
+		}).start();
 		apods.requestFocus();
 	}
 	
 	@FXML
 	void random(ActionEvent event){
-		LocalDate rDate = getRandomDateInAPOD(0, 0);
-		apods.getItems().clear();
 		final Integer countValue = count.getValue();
-		if(countValue < 2)
-			apods.getItems().add(API.getAPOD(rDate));
-		else
-		{
-			rDate = getRandomDateInAPOD(countValue, 0);
-			Set<APOD> results = API.getAPODs(rDate, rDate.plusDays(countValue - 1));
-			if(results != null)
-				//minus 1 to account that start date count as one as well as end date
+		apods.getItems().clear();
+		new Thread(() -> {
+			API.setProgress(000);
+			LocalDate rDate = getRandomDateInAPOD(0, 0);
+			if(countValue < 2)
+				apods.getItems().add(API.getAPOD(rDate));
+			else
+			{
+				TreeSet<APOD> results = new TreeSet<APOD>();
+				while(results.size() != countValue)
+				{
+					results.add(API.getAPOD(getRandomDateInAPOD(0, 0)));
+					API.setProgress((float) results.size() / countValue);
+				}
 				apods.getItems().addAll(results);
-		}
+				System.out.println(apods.getItems().size());
+				apods.getItems().forEach(System.out::println);
+			}
+			API.setProgress(100);
+		}).start();
+		new Thread(() -> {
+			progress.setVisible(true);
+			progress.setDisable(false);
+			controls.setDisable(true);
+			progress.getStyleClass().remove("progress-bar-success");
+			while(API.getProgress() < 1)
+				progress.progressProperty().setValue(API.getProgress());
+			controls.setDisable(false);
+			progress.getStyleClass().add("progress-bar-success");
+			progress.setVisible(false);
+		}).start();
 	}
 	
 	@FXML

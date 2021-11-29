@@ -6,10 +6,8 @@ module space.nasa.spaceapi {
 	requires javafx.web;
 	requires org.controlsfx.controls;
 	requires com.dlsc.formsfx;
-	requires validatorfx;
 	requires org.kordamp.ikonli.javafx;
 	requires org.kordamp.bootstrapfx.core;
-	requires eu.hansolo.tilesfx;
 	requires com.google.gson;
 	requires java.net.http;
 	opens space.nasa.spaceapi to javafx.fxml;
