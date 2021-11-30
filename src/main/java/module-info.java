@@ -10,6 +10,7 @@ module space.nasa.spaceapi {
 	requires org.kordamp.bootstrapfx.core;
 	requires com.google.gson;
 	requires java.net.http;
+	requires javafx.media;
 	opens space.nasa.spaceapi to javafx.fxml;
 	exports space.nasa.spaceapi;
 	exports space.nasa.spaceapi.controllers to javafx.fxml;

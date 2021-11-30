@@ -15,7 +15,10 @@ import space.nasa.spaceapi.utilities.Transition;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.TreeSet;
 
 public class searchController implements Initializable{
 	public static final LocalDate minDate = LocalDate.parse("1995-06-16");
@@ -140,19 +143,17 @@ public class searchController implements Initializable{
 		final Integer countValue = count.getValue();
 		apods.getItems().clear();
 		new Thread(() -> {
-			API.setProgress(000);
+			API.setProgress(0);
 			LocalDate rDate = getRandomDateInAPOD(0, 0);
 			if(countValue < 2)
 				apods.getItems().add(API.getAPOD(rDate));
 			else
 			{
-				TreeSet<APOD> results = new TreeSet<APOD>();
-				while(results.size() != countValue)
+				while(apods.getItems().size() != countValue)
 				{
-					results.add(API.getAPOD(getRandomDateInAPOD(0, 0)));
-					API.setProgress((float) results.size() / countValue);
+					apods.getItems().add(0, API.getAPOD(getRandomDateInAPOD(0, 0)));
+					API.setProgress((float) apods.getItems().size() / countValue);
 				}
-				apods.getItems().addAll(results);
 			}
 			API.setProgress(100);
 		}, "query API").start();
@@ -195,7 +196,7 @@ public class searchController implements Initializable{
 		addDateChecker(end);
 		start.setValue(rDate.minusDays(amount));
 		end.setValue(rDate);
-		date.setValue(getRandomDateInAPOD(0, 0));
+		date.setValue(LocalDate.now());
 		Transition.addStyle(apods);
 	}
 	

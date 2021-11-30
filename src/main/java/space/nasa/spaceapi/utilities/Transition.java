@@ -26,12 +26,14 @@ public class Transition{
 	}
 	
 	public static void to(Event event, String fxmlFile, String title, APOD apod){
+		InitializableAPOD controller = null;
 		try
 		{
-			final InitializableAPOD controller = to(event, fxmlFile, title).getController();
-			controller.initializeAPOD(apod);
+			controller = to(event, fxmlFile, title).getController();
 		}
-		catch(IOException | RuntimeException ignored) {}
+		catch(IOException ignored) {}
+		if(controller != null)
+		controller.initializeAPOD(apod);
 	}
 	
 	public static void close(ActionEvent event){

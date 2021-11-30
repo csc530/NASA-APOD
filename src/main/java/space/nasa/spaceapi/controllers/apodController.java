@@ -6,17 +6,29 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
+import javafx.scene.web.WebView;
 import space.nasa.spaceapi.models.APOD;
 import space.nasa.spaceapi.utilities.API;
 import space.nasa.spaceapi.utilities.Transition;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class apodController implements InitializableAPOD, Initializable{
+	//credits to EliteArena on Pinterest: https://www.pinterest.ca/Elite_Arena/
+	//link to pin = https://www.pinterest.ca/pin/750834569105233692/
+	private static final String notFound404 = "https://i.pinimg.com/originals/13/3d/62/133d62f4c7611596b265b81bfb9be08c.gif";
+	@FXML
+	private WebView video;
 	private APOD apod;
 	@FXML
 	private Label title;
@@ -68,9 +80,24 @@ public class apodController implements InitializableAPOD, Initializable{
 	}
 	
 	private void updateAPOD(){
+		video.setVisible(false);
+		video.toBack();
+		video.getEngine().load("");
+		image.setVisible(true);
+		if(apod.getUrl() == null)
+			image.setImage(new Image(notFound404));
+		else if(this.apod.getMediaType().equals("video"))
+		{
+			video.getEngine().load(apod.getUrl().toString());
+			image.setVisible(false);
+			video.toFront();
+			image.toBack();
+			video.setVisible(true);
+		}
+		else
+			image.setImage(apod.getImage());
 		explanation.setText(apod.getExplanation());
 		title.setText(apod.getTitle());
-		image.setImage(apod.getImage());
 		date.setText(apod.getDateString());
 		copyright.setText(apod.getCopyright());
 	}
@@ -79,5 +106,8 @@ public class apodController implements InitializableAPOD, Initializable{
 	public void initializeAPOD(APOD apod){
 		this.apod = apod == null ? API.getAPOD() : apod;
 		updateAPOD();
+	}
+	
+	public void openImage(MouseEvent mouseEvent){
 	}
 }

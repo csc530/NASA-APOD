@@ -46,7 +46,7 @@ public class APOD implements Comparable<APOD>{
 		//if they add 5 elements or reach the end of the description string
 		for(int i = 0; (i < 5) && (i < s.length); i++)
 			joiner.add(s[i]);
-		return "%s\n%s\n%s\n".formatted(getDateString(), title, joiner.toString());
+		return "%s - %s\n%s\n%s\n".formatted(getDateString(), getMediaType(), title, joiner.toString());
 	}
 	
 	public URL getThumbnail(){
