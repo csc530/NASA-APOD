@@ -101,12 +101,10 @@ public class apodController implements InitializableAPOD, Initializable{
 		copyright.setText(apod.getCopyright());
 	}
 	
+	
 	@Override
 	public void initializeAPOD(APOD apod){
 		this.apod = apod == null ? API.getAPOD() : apod;
 		updateAPOD();
-	}
-	
-	public void openImage(MouseEvent mouseEvent){
 	}
 }

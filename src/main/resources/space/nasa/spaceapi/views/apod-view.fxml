@@ -71,7 +71,7 @@
          <center>
             <StackPane prefHeight="350.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fx:id="image" cache="true" fitHeight="325.0" fitWidth="600.0" onMouseClicked="#openImage" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="image" cache="true" fitHeight="325.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
                      <viewport>
                         <Rectangle2D />
                      </viewport>
