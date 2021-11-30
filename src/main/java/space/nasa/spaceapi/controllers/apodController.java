@@ -8,7 +8,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.web.WebView;
 import space.nasa.spaceapi.models.APOD;
 import space.nasa.spaceapi.utilities.API;
@@ -20,11 +19,14 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class apodController implements InitializableAPOD, Initializable{
-	//credits to EliteArena on Pinterest: https://www.pinterest.ca/Elite_Arena/
-	//link to pin = https://www.pinterest.ca/pin/750834569105233692/
+	/**
+	 * link to a 404 resource not found image<br/>
+	 * credits to <a href=" https://www.pinterest.ca/Elite_Arena/">EliteArena on Pinterest</a><br/>
+	 * <a href="https://www.pinterest.ca/pin/750834569105233692/">to pin</a>
+	 **/
 	private static final String notFound404 = "https://i.pinimg.com/originals/13/3d/62/133d62f4c7611596b265b81bfb9be08c.gif";
 	@FXML
-	private WebView video;
+	private WebView webView;
 	private APOD apod;
 	@FXML
 	private Label title;
@@ -68,30 +70,42 @@ public class apodController implements InitializableAPOD, Initializable{
 		}
 	}
 	
+	/**
+	 * Changes scenes to search A.P.O.D.s
+	 * @param event used to get the stage and switch scenes
+	 */
 	@FXML
-	void search(ActionEvent event) throws IOException{
+	void search(ActionEvent event){
 		Transition.to(event, "search-view.fxml", "Search NASA's Astronomy Picture of the Day API");
 	}
 	
+	/**
+	 * Adds styles to scene
+	 */
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle){
 		Transition.addStyle(date);
 	}
 	
+	/**
+	 * Updates the view to reflect the current {@link APOD}'s information in the controller's
+	 */
 	private void updateAPOD(){
-		video.setVisible(false);
-		video.toBack();
-		video.getEngine().load("");
+		webView.setVisible(false);
+		webView.toBack();
+		//clear webview of contents
+		webView.getEngine().load("");
 		image.setVisible(true);
+		//add image, video, or 404 image depending on APOD
 		if(apod.getUrl() == null)
 			image.setImage(new Image(notFound404));
 		else if(this.apod.getMediaType().equals("video"))
 		{
-			video.getEngine().load(apod.getUrl().toString());
+			webView.getEngine().load(apod.getUrl().toString());
 			image.setVisible(false);
-			video.toFront();
+			webView.toFront();
 			image.toBack();
-			video.setVisible(true);
+			webView.setVisible(true);
 		}
 		else
 			image.setImage(apod.getImage());
@@ -101,9 +115,9 @@ public class apodController implements InitializableAPOD, Initializable{
 		copyright.setText(apod.getCopyright());
 	}
 	
-	
 	@Override
 	public void initializeAPOD(APOD apod){
+		//if apod is null get current dates APOD from API
 		this.apod = apod == null ? API.getAPOD() : apod;
 		updateAPOD();
 	}

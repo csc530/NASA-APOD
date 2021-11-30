@@ -76,7 +76,7 @@
                         <Rectangle2D />
                      </viewport>
                   </ImageView>
-                  <WebView fx:id="video" prefHeight="200.0" prefWidth="200.0" />
+                  <WebView fx:id="webView" prefHeight="200.0" prefWidth="200.0" />
                </children>
             </StackPane>
          </center>

@@ -49,7 +49,7 @@ public class APOD implements Comparable<APOD>{
 	/**
 	 * Indicates whether some other object is "equal to" this one.
 	 * @param obj the object to be compared to
-	 * @return <p>There are two cases<ul>
+	 * @return <p>There are three cases<ul>
 	 * 		<li>If the {@code obj} is null or not of the same class {@code false} is returned</li>
 	 * 		<li>
 	 * 		If the obj is of the {@link APOD} class then their dates and titles are compared and if they are both
