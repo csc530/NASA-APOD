@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="EntryPointsManager">
+    <entry_points version="2.0">
+      <entry_point TYPE="field" FQNAME="space.nasa.spaceapi.models.APOD copyright" />
+      <entry_point TYPE="field" FQNAME="space.nasa.spaceapi.models.APOD url" />
+      <entry_point TYPE="field" FQNAME="space.nasa.spaceapi.models.APOD date" />
+      <entry_point TYPE="field" FQNAME="space.nasa.spaceapi.models.APOD explanation" />
+      <entry_point TYPE="field" FQNAME="space.nasa.spaceapi.models.APOD title" />
+    </entry_points>
+  </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>

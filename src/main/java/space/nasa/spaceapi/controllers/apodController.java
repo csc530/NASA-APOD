@@ -13,7 +13,6 @@ import space.nasa.spaceapi.models.APOD;
 import space.nasa.spaceapi.utilities.API;
 import space.nasa.spaceapi.utilities.Transition;
 
-import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;

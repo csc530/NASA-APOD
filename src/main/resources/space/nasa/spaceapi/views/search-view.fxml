@@ -1,172 +1,195 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.Spinner?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="space.nasa.spaceapi.controllers.searchController">
+<?import java.lang.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0"
+            prefWidth="800.0" xmlns="http://javafx.com/javafx/16"
+            fx:controller="space.nasa.spaceapi.controllers.searchController">
 	<children>
-      <StackPane AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
-         <children>
-      		<BorderPane prefHeight="525.0" prefWidth="750.0">
-      			<padding>
-      				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-      			</padding>
-               <top>
-      						<Label text="Search for an astronomy picture of the day" wrapText="true" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                     <styleClass>
-                        <String fx:value="title" />
-                        <String fx:value="h1" />
-                        <String fx:value="capitilize" />
-                     </styleClass>
-                     <BorderPane.margin>
-                        <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
-                     </BorderPane.margin>
-                  </Label>
-               </top>
-               <center>
-                  <HBox alignment="CENTER" BorderPane.alignment="CENTER">
-                     <children>
-                        <VBox fx:id="controls" prefWidth="365.0" spacing="30.0" HBox.hgrow="SOMETIMES">
-                           <children>
-                              <VBox alignment="CENTER" prefHeight="165.0" spacing="8.0">
-                                 <children>
-                                    <Label text="Search for one day's A.P.O,D." wrapText="true">
-                                       <styleClass>
-                                          <String fx:value="text-info" />
-                                          <String fx:value="h4" />
-                                       </styleClass>
-                                    </Label>
-                                    <HBox alignment="CENTER" prefHeight="30.0">
-                                       <children>
-                                          <Label alignment="CENTER" contentDisplay="CENTER" minHeight="30.0" minWidth="75.0" prefHeight="30.0" prefWidth="75.0" text="Date" textAlignment="CENTER" HBox.hgrow="SOMETIMES" />
-                                          <DatePicker fx:id="datePicker" editable="false" minHeight="30.0" prefHeight="30.0" styleClass="text-primary" HBox.hgrow="SOMETIMES" />
-                                       </children>
-                                    </HBox>
-                                    <Button fx:id="btnSearch" defaultButton="true" minHeight="30.0" mnemonicParsing="false" onAction="#search" prefHeight="30.0" text="Search">
-                                       <styleClass>
-                                          <String fx:value="btn" />
-                                          <String fx:value="btn-primary" />
-                                       </styleClass>
-                                    </Button>
-                                 </children>
-                              </VBox>
-                              <VBox alignment="CENTER" prefHeight="165.0" spacing="8.0">
-                                 <children>
-                                    <Label text="Random amount of A.P.O.D.s" wrapText="true">
-                                       <styleClass>
-                                          <String fx:value="text-info" />
-                                          <String fx:value="h4" />
-                                       </styleClass>
-                                    </Label>
-                                    <HBox alignment="CENTER">
-                                       <children>
-                                          <Label alignment="CENTER" minHeight="30.0" minWidth="75.0" prefHeight="30.0" prefWidth="75.0" text="Amount" HBox.hgrow="SOMETIMES" />
-                                          <Spinner fx:id="randomSpinner" minHeight="30.0" prefHeight="30.0" styleClass="text-primary" />
-                                       </children>
-                                    </HBox>
-                                    <Button minHeight="30.0" mnemonicParsing="false" onAction="#random" prefHeight="30.0" text="Randomize">
-                                       <styleClass>
-                                          <String fx:value="btn" />
-                                          <String fx:value="btn-primary" />
-                                       </styleClass>
-                                    </Button>
-                                 </children>
-                              </VBox>
-                              <VBox alignment="CENTER" prefHeight="165.0" spacing="8.0">
-                                 <children>
-                                    <Label text="Seach A.P.O.D.s between a date" wrapText="true">
-                                       <styleClass>
-                                          <String fx:value="text-info" />
-                                          <String fx:value="h4" />
-                                       </styleClass>
-                                    </Label>
-                                    <GridPane alignment="CENTER" vgap="5.0">
-                                      <columnConstraints>
-                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
-                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
-                                      </columnConstraints>
-                                      <rowConstraints>
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                      </rowConstraints>
-                                       <children>
-                                          <DatePicker fx:id="startDatePicker" editable="false" minHeight="30.0" prefHeight="30.0" styleClass="text-primary" GridPane.columnIndex="1" />
-                                          <DatePicker fx:id="endDatePicker" editable="false" minHeight="30.0" prefHeight="30.0" styleClass="text-primary" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                          <Label alignment="CENTER" minHeight="30.0" minWidth="75.0" prefHeight="30.0" prefWidth="75.0" text="End date" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                                          <Label alignment="CENTER" minHeight="30.0" minWidth="75.0" prefHeight="30.0" prefWidth="75.0" text="Start date" textAlignment="CENTER" GridPane.halignment="CENTER" />
-                                       </children>
-                                    </GridPane>
-                                    <Button minHeight="30.0" mnemonicParsing="false" onAction="#rangeSearch" prefHeight="30.0" text="Search">
-                                       <styleClass>
-                                          <String fx:value="btn" />
-                                          <String fx:value="btn-primary" />
-                                       </styleClass>
-                                    </Button>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </VBox>
-                        <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
-                           <children>
-                              <Label styleClass="h4" text="Sort By" />
-                              <HBox alignment="CENTER" prefHeight="50.0" VBox.vgrow="NEVER">
-                                 <children>
-                                    <Label fx:id="lblDateSort" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#sortList" styleClass="h4" text="- Date" underline="true" />
-                                    <Separator orientation="VERTICAL" prefHeight="200.0" />
-                                    <Label fx:id="lblTitleSort" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#sortList" styleClass="h4" text="- Title" underline="true" />
-                                 </children>
-                              </HBox>
-                              <ListView fx:id="apodsList" onMouseClicked="#selectAPOD" prefHeight="450.0" prefWidth="415.0">
-                                 <padding>
-                                    <Insets bottom="5.0" top="5.0" />
-                                 </padding>
-                                 <styleClass>
-                                    <String fx:value="text-info" />
-                                    <String fx:value="h5" />
-                                 </styleClass>
-                              </ListView>
-                           </children>
-                        </VBox>
-                     </children>
-                  </HBox>
-               </center>
-               <bottom>
-                  <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#Exit" prefHeight="50.0" prefWidth="180.0" text="Exit" BorderPane.alignment="CENTER">
-                     <styleClass>
-                        <String fx:value="btn" />
-                        <String fx:value="btn-danger" />
-                     </styleClass>
-                     <BorderPane.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </BorderPane.margin>
-                  </Button>
-               </bottom>
-      		</BorderPane>
-            <ProgressBar fx:id="progressBar" prefHeight="70.0" prefWidth="382.0" progress="0.0">
-               <styleClass>
-                  <String fx:value="progress-bar-success" />
-                  <String fx:value="track" />
-               </styleClass></ProgressBar>
-         </children>
-      </StackPane>
+		<StackPane AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0"
+		           AnchorPane.topAnchor="5.0">
+			<children>
+				<BorderPane prefHeight="525.0" prefWidth="750.0">
+					<padding>
+						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+					</padding>
+					<top>
+						<Label text="Search for an astronomy picture of the day" wrapText="true"
+						       BorderPane.alignment="CENTER">
+							<font>
+								<Font size="20.0"/>
+							</font>
+							<styleClass>
+								<String fx:value="title"/>
+								<String fx:value="h1"/>
+								<String fx:value="capitalize"/>
+							</styleClass>
+							<BorderPane.margin>
+								<Insets bottom="7.0" left="7.0" right="7.0" top="7.0"/>
+							</BorderPane.margin>
+						</Label>
+					</top>
+					<center>
+						<HBox alignment="CENTER" BorderPane.alignment="CENTER">
+							<children>
+								<VBox fx:id="controls" prefWidth="365.0" spacing="30.0" HBox.hgrow="SOMETIMES">
+									<children>
+										<VBox alignment="CENTER" prefHeight="165.0" spacing="8.0">
+											<children>
+												<Label text="Search for one day's A.P.O,D." wrapText="true">
+													<styleClass>
+														<String fx:value="text-info"/>
+														<String fx:value="h4"/>
+													</styleClass>
+												</Label>
+												<HBox alignment="CENTER" prefHeight="30.0">
+													<children>
+														<Label alignment="CENTER" contentDisplay="CENTER"
+														       minHeight="30.0" minWidth="75.0" prefHeight="30.0"
+														       prefWidth="75.0" text="Date" textAlignment="CENTER"
+														       HBox.hgrow="SOMETIMES"/>
+														<DatePicker fx:id="datePicker" editable="false" minHeight="30.0"
+														            prefHeight="30.0" styleClass="text-primary"
+														            HBox.hgrow="SOMETIMES"/>
+													</children>
+												</HBox>
+												<Button defaultButton="true" minHeight="30.0"
+												        mnemonicParsing="false" onAction="#search" prefHeight="30.0"
+												        text="Search">
+													<styleClass>
+														<String fx:value="btn"/>
+														<String fx:value="btn-primary"/>
+													</styleClass>
+												</Button>
+											</children>
+										</VBox>
+										<VBox alignment="CENTER" prefHeight="165.0" spacing="8.0">
+											<children>
+												<Label text="Random amount of A.P.O.D.s" wrapText="true">
+													<styleClass>
+														<String fx:value="text-info"/>
+														<String fx:value="h4"/>
+													</styleClass>
+												</Label>
+												<HBox alignment="CENTER">
+													<children>
+														<Label alignment="CENTER" minHeight="30.0" minWidth="75.0"
+														       prefHeight="30.0" prefWidth="75.0" text="Amount"
+														       HBox.hgrow="SOMETIMES"/>
+														<Spinner fx:id="randomSpinner" minHeight="30.0"
+														         prefHeight="30.0" styleClass="text-primary"/>
+													</children>
+												</HBox>
+												<Button minHeight="30.0" mnemonicParsing="false" onAction="#random"
+												        prefHeight="30.0" text="Randomize">
+													<styleClass>
+														<String fx:value="btn"/>
+														<String fx:value="btn-primary"/>
+													</styleClass>
+												</Button>
+											</children>
+										</VBox>
+										<VBox alignment="CENTER" prefHeight="165.0" spacing="8.0">
+											<children>
+												<Label text="Search A.P.O.D.s between a date" wrapText="true">
+													<styleClass>
+														<String fx:value="text-info"/>
+														<String fx:value="h4"/>
+													</styleClass>
+												</Label>
+												<GridPane alignment="CENTER" vgap="5.0">
+													<columnConstraints>
+														<ColumnConstraints halignment="CENTER" hgrow="SOMETIMES"
+														                   minWidth="10.0"/>
+														<ColumnConstraints halignment="CENTER" hgrow="SOMETIMES"
+														                   minWidth="10.0"/>
+													</columnConstraints>
+													<rowConstraints>
+														<RowConstraints minHeight="10.0" prefHeight="30.0"
+														                vgrow="SOMETIMES"/>
+														<RowConstraints minHeight="10.0" prefHeight="30.0"
+														                vgrow="SOMETIMES"/>
+													</rowConstraints>
+													<children>
+														<DatePicker fx:id="startDatePicker" editable="false"
+														            minHeight="30.0" prefHeight="30.0"
+														            styleClass="text-primary" GridPane.columnIndex="1"/>
+														<DatePicker fx:id="endDatePicker" editable="false"
+														            minHeight="30.0" prefHeight="30.0"
+														            styleClass="text-primary" GridPane.columnIndex="1"
+														            GridPane.rowIndex="1"/>
+														<Label alignment="CENTER" minHeight="30.0" minWidth="75.0"
+														       prefHeight="30.0" prefWidth="75.0" text="End date"
+														       textAlignment="CENTER" GridPane.halignment="CENTER"
+														       GridPane.rowIndex="1"/>
+														<Label alignment="CENTER" minHeight="30.0" minWidth="75.0"
+														       prefHeight="30.0" prefWidth="75.0" text="Start date"
+														       textAlignment="CENTER" GridPane.halignment="CENTER"/>
+													</children>
+												</GridPane>
+												<Button minHeight="30.0" mnemonicParsing="false" onAction="#rangeSearch"
+												        prefHeight="30.0" text="Search">
+													<styleClass>
+														<String fx:value="btn"/>
+														<String fx:value="btn-primary"/>
+													</styleClass>
+												</Button>
+											</children>
+										</VBox>
+									</children>
+								</VBox>
+								<VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+									<children>
+										<Label styleClass="h4" text="Sort By"/>
+										<HBox alignment="CENTER" prefHeight="50.0" VBox.vgrow="NEVER">
+											<children>
+												<Label fx:id="lblDateSort" alignment="CENTER" contentDisplay="CENTER"
+												       onMouseClicked="#sortList" styleClass="h4" text="- Date"
+												       underline="true"/>
+												<Separator orientation="VERTICAL" prefHeight="200.0"/>
+												<Label fx:id="lblTitleSort" alignment="CENTER" contentDisplay="CENTER"
+												       onMouseClicked="#sortList" styleClass="h4" text="- Title"
+												       underline="true"/>
+											</children>
+										</HBox>
+										<ListView fx:id="apodsList" onMouseClicked="#selectAPOD" prefHeight="450.0"
+										          prefWidth="415.0">
+											<padding>
+												<Insets bottom="5.0" top="5.0"/>
+											</padding>
+											<styleClass>
+												<String fx:value="text-info"/>
+												<String fx:value="h5"/>
+											</styleClass>
+										</ListView>
+									</children>
+								</VBox>
+							</children>
+						</HBox>
+					</center>
+					<bottom>
+						<Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#Exit"
+						        prefHeight="50.0" prefWidth="180.0" text="Exit" BorderPane.alignment="CENTER">
+							<styleClass>
+								<String fx:value="btn"/>
+								<String fx:value="btn-danger"/>
+							</styleClass>
+							<BorderPane.margin>
+								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+							</BorderPane.margin>
+						</Button>
+					</bottom>
+				</BorderPane>
+				<ProgressBar fx:id="progressBar" prefHeight="70.0" prefWidth="382.0" progress="0.0">
+					<styleClass>
+						<String fx:value="progress-bar-success"/>
+						<String fx:value="track"/>
+					</styleClass>
+				</ProgressBar>
+			</children>
+		</StackPane>
 	</children>
 </AnchorPane>

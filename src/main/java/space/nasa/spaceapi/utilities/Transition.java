@@ -77,7 +77,7 @@ public class Transition{
 	}
 	
 	/**
-	 * this will add the Bootstrap stlye effect to a given scene from {@link BootstrapFX}
+	 * this will add the Bootstrap style effect to a given scene from {@link BootstrapFX}
 	 * @param node A {@link Node} from the scene to add the BootstrapFX stylesheet
 	 */
 	public static void addStyle(Node node){
@@ -86,5 +86,6 @@ public class Transition{
 		AnchorPane root = (AnchorPane) node;
 		//adds maven dependency bootstrap stylesheet to anchor-pane
 		root.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
+		root.getStylesheets().add("/src/main/resources/space/nasa/spaceapi/style.css");
 	}
 }

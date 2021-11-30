@@ -107,7 +107,7 @@ public class APOD implements Comparable<APOD>{
 	 * @return the date which the A.P.O.D. was posted
 	 */
 	public LocalDate getDate(){
-		//i need to convert to lacaldate instead of maikng the datatype local date because java.time module "doEsn'T
+		//I need to convert to LocalDate instead of making the datatype local date because java.time module "doEsn'T
 		// oPeN tO th gson
 		//Converts date which opens to gson to LocalDate (which doesn't) so subtract and add and better functions can be performed
 		// divide 60 60 24 to convert the epochSecond to epoch Day for the method to work correctly

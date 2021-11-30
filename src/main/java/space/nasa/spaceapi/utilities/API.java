@@ -48,7 +48,7 @@ public class API{
 			String response = client.send(request, HttpResponse.BodyHandlers.ofString()).body();
 			return gson.fromJson(response, APOD.class);
 		}
-		catch(JsonSyntaxException|IOException | InterruptedException e)
+		catch(JsonSyntaxException | IOException | InterruptedException e)
 		{
 			e.printStackTrace();
 			return new APOD();
@@ -86,7 +86,7 @@ public class API{
 	/**
 	 * Call APOD API to get multiple A.P.O.D.s between the {@code start} and {@code end} date; inclusive.
 	 * <p>
-	 * If the start date is after the end date null will be returned. Furthemore if either the start or end date
+	 * If the start date is after the end date null will be returned. Furthermore if either the start or end date
 	 * is outside the bounds of the {@link APOD#minDate} and {@link APOD#maxDate} respectively, null will be
 	 * returned
 	 * </p>
@@ -137,7 +137,7 @@ public class API{
 				String response = client.send(request, HttpResponse.BodyHandlers.ofString()).body();
 				return gson.fromJson(response, typeOf);
 			}
-			catch(JsonSyntaxException|IOException | InterruptedException e)
+			catch(JsonSyntaxException | IOException | InterruptedException e)
 			{
 				e.printStackTrace();
 				return null;
