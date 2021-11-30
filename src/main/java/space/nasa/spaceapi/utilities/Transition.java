@@ -86,6 +86,6 @@ public class Transition{
 		AnchorPane root = (AnchorPane) node;
 		//adds maven dependency bootstrap stylesheet to anchor-pane
 		root.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
-		root.getStylesheets().add("/src/main/resources/space/nasa/spaceapi/style.css");
+		root.getStylesheets().add(Main.class.getResource("styles/style.css").toString());
 	}
 }
