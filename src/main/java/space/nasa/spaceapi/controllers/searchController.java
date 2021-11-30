@@ -21,7 +21,6 @@ import java.util.ResourceBundle;
 import java.util.TreeSet;
 
 public class searchController implements Initializable{
-	public static final LocalDate minDate = LocalDate.parse("1995-06-16");
 	@FXML
 	private ProgressBar progress;
 	@FXML
@@ -54,12 +53,8 @@ public class searchController implements Initializable{
 	 */
 	public static LocalDate getRandomDateInAPOD(int daysFromPresent, int daysFromBeginning){
 		long today = LocalDate.now().toEpochDay();
-		long startDate = minDate.toEpochDay();
+		long startDate = APOD.minDate.toEpochDay();
 		return LocalDate.ofEpochDay((long) (Math.random() * (today - startDate - daysFromPresent) + (daysFromBeginning + startDate)));
-	}
-	
-	@FXML
-	void back(ActionEvent event){
 	}
 	
 	@FXML
@@ -206,7 +201,7 @@ public class searchController implements Initializable{
 			@Override
 			public void updateItem(LocalDate item, boolean empty){
 				super.updateItem(item, empty);
-				setDisable(item.isAfter(LocalDate.now()) || item.isBefore(minDate));
+				setDisable(item.isAfter(LocalDate.now()) || item.isBefore(APOD.minDate));
 			}
 		});
 	}

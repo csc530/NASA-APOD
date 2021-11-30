@@ -8,7 +8,6 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -16,7 +15,7 @@
 
 <AnchorPane cache="true" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="space.nasa.spaceapi.controllers.apodController">
    <children>
-      <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
          <top>
             <VBox alignment="CENTER" maxHeight="-Infinity" prefHeight="50.0" BorderPane.alignment="CENTER">
                <children>
@@ -31,14 +30,20 @@
                <styleClass>
                   <String fx:value="btn" />
                   <String fx:value="btn-primary" />
-               </styleClass></Button>
+               </styleClass>
+               <BorderPane.margin>
+                  <Insets right="15.0" />
+               </BorderPane.margin></Button>
          </left>
          <right>
             <Button mnemonicParsing="false" onAction="#next" prefHeight="250.0" prefWidth="75.0" text="Next" BorderPane.alignment="CENTER">
                <styleClass>
                   <String fx:value="btn" />
                   <String fx:value="btn-primary" />
-               </styleClass></Button>
+               </styleClass>
+               <BorderPane.margin>
+                  <Insets left="15.0" />
+               </BorderPane.margin></Button>
          </right>
          <bottom>
             <VBox alignment="CENTER" maxHeight="250.0" prefHeight="200.0" spacing="5.0" BorderPane.alignment="CENTER">
@@ -51,20 +56,12 @@
                      <font>
                         <Font size="15.0" />
                      </font></Label>
-                  <HBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" spacing="35.0" VBox.vgrow="SOMETIMES">
-                     <children>
-                        <Button mnemonicParsing="false" onAction="#home" prefHeight="50.0" prefWidth="150.0" text="Home" textAlignment="CENTER">
-                           <styleClass>
-                              <String fx:value="btn" />
-                              <String fx:value="btn-default" />
-                           </styleClass></Button>
-                        <Button mnemonicParsing="false" onAction="#search" prefHeight="50.0" prefWidth="150.0" text="Search NASA's A.P.O.D." textAlignment="CENTER" wrapText="true">
-                           <styleClass>
-                              <String fx:value="btn" />
-                              <String fx:value="btn-default" />
-                           </styleClass></Button>
-                     </children>
-                  </HBox>
+                  <Button mnemonicParsing="false" onAction="#search" prefHeight="50.0" prefWidth="150.0" text="Search NASA's A.P.O.D." textAlignment="CENTER" wrapText="true">
+                     <styleClass>
+                        <String fx:value="btn" />
+                        <String fx:value="btn-default" />
+                     </styleClass>
+                  </Button>
                </children>
             </VBox>
          </bottom>

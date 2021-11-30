@@ -9,16 +9,12 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.scene.web.WebView;
 import space.nasa.spaceapi.models.APOD;
 import space.nasa.spaceapi.utilities.API;
 import space.nasa.spaceapi.utilities.Transition;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
@@ -41,11 +37,15 @@ public class apodController implements InitializableAPOD, Initializable{
 	@FXML
 	private Label explanation;
 	
+	/**
+	 * Calls the API to fetch the previous day's A.P.O.D.
+	 * This will not fetch dates before 1995-06-16, June 16, 1995. As the API has no records and will return an error
+	 */
 	@FXML
-	void prev(ActionEvent event){
-		if(apod.getDate().isEqual(searchController.minDate))
+	void prev(){
+		if(apod.getDate().isEqual(APOD.minDate))
 			new Alert(Alert.AlertType.INFORMATION, "there are no images for NASA's astronomy picture of the day " +
-					"before " + searchController.minDate + ".", ButtonType.OK).show();
+					"before " + APOD.minDate + ".", ButtonType.OK).show();
 		else
 		{
 			apod = API.getAPOD(apod.getDate().minusDays(1));
@@ -53,8 +53,12 @@ public class apodController implements InitializableAPOD, Initializable{
 		}
 	}
 	
+	/**
+	 * Calls the API to fetch next day's A.P.O.D.
+	 * It will not fetch future dates as the API will return an error
+	 */
 	@FXML
-	void next(ActionEvent event){
+	void next(){
 		if(apod.getDate().isEqual(LocalDate.now()))
 			new Alert(Alert.AlertType.INFORMATION, "there are no images for NASA's future astronomy picture of the day", ButtonType.OK).show();
 		else
@@ -62,11 +66,6 @@ public class apodController implements InitializableAPOD, Initializable{
 			apod = API.getAPOD(apod.getDate().plusDays(1));
 			updateAPOD();
 		}
-	}
-	
-	@FXML
-	void home(ActionEvent event) throws IOException{
-		Transition.to(event, "home.fxml", "NASA's APIs");
 	}
 	
 	@FXML

@@ -28,6 +28,8 @@ public class APOD implements Comparable<APOD>{
 	//it was a URL but there are some malformed returned URLs from the API and there was no way to validate them
 	// before an object is instantiated and crashes the program
 	private String url;
+	public static final LocalDate minDate = LocalDate.parse("1995-06-16");
+	public static final LocalDate maxDate = LocalDate.now();
 	
 	@Override
 	public boolean equals(Object obj){
