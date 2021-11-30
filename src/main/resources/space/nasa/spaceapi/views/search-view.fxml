@@ -58,7 +58,7 @@
                                     <HBox alignment="CENTER" prefHeight="30.0">
                                        <children>
                                           <Label alignment="CENTER" contentDisplay="CENTER" minHeight="30.0" minWidth="75.0" prefHeight="30.0" prefWidth="75.0" text="Date" textAlignment="CENTER" HBox.hgrow="SOMETIMES" />
-                                          <DatePicker fx:id="date" editable="false" minHeight="30.0" prefHeight="30.0" styleClass="text-primary" HBox.hgrow="SOMETIMES" />
+                                          <DatePicker fx:id="datePicker" editable="false" minHeight="30.0" prefHeight="30.0" styleClass="text-primary" HBox.hgrow="SOMETIMES" />
                                        </children>
                                     </HBox>
                                     <Button fx:id="btnSearch" defaultButton="true" minHeight="30.0" mnemonicParsing="false" onAction="#search" prefHeight="30.0" text="Search">
@@ -80,7 +80,7 @@
                                     <HBox alignment="CENTER">
                                        <children>
                                           <Label alignment="CENTER" minHeight="30.0" minWidth="75.0" prefHeight="30.0" prefWidth="75.0" text="Amount" HBox.hgrow="SOMETIMES" />
-                                          <Spinner fx:id="count" minHeight="30.0" prefHeight="30.0" styleClass="text-primary" />
+                                          <Spinner fx:id="randomSpinner" minHeight="30.0" prefHeight="30.0" styleClass="text-primary" />
                                        </children>
                                     </HBox>
                                     <Button minHeight="30.0" mnemonicParsing="false" onAction="#random" prefHeight="30.0" text="Randomize">
@@ -109,8 +109,8 @@
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <children>
-                                          <DatePicker fx:id="start" editable="false" minHeight="30.0" prefHeight="30.0" styleClass="text-primary" GridPane.columnIndex="1" />
-                                          <DatePicker fx:id="end" editable="false" minHeight="30.0" prefHeight="30.0" styleClass="text-primary" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <DatePicker fx:id="startDatePicker" editable="false" minHeight="30.0" prefHeight="30.0" styleClass="text-primary" GridPane.columnIndex="1" />
+                                          <DatePicker fx:id="endDatePicker" editable="false" minHeight="30.0" prefHeight="30.0" styleClass="text-primary" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                           <Label alignment="CENTER" minHeight="30.0" minWidth="75.0" prefHeight="30.0" prefWidth="75.0" text="End date" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                                           <Label alignment="CENTER" minHeight="30.0" minWidth="75.0" prefHeight="30.0" prefWidth="75.0" text="Start date" textAlignment="CENTER" GridPane.halignment="CENTER" />
                                        </children>
@@ -130,12 +130,12 @@
                               <Label styleClass="h4" text="Sort By" />
                               <HBox alignment="CENTER" prefHeight="50.0" VBox.vgrow="NEVER">
                                  <children>
-                                    <Label fx:id="dateSort" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#sortList" styleClass="h4" text="- Date" underline="true" />
+                                    <Label fx:id="lblDateSort" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#sortList" styleClass="h4" text="- Date" underline="true" />
                                     <Separator orientation="VERTICAL" prefHeight="200.0" />
-                                    <Label fx:id="titleSort" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#sortList" styleClass="h4" text="- Title" underline="true" />
+                                    <Label fx:id="lblTitleSort" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#sortList" styleClass="h4" text="- Title" underline="true" />
                                  </children>
                               </HBox>
-                              <ListView fx:id="apods" onMouseClicked="#selectAPOD" prefHeight="450.0" prefWidth="415.0">
+                              <ListView fx:id="apodsList" onMouseClicked="#selectAPOD" prefHeight="450.0" prefWidth="415.0">
                                  <padding>
                                     <Insets bottom="5.0" top="5.0" />
                                  </padding>
@@ -161,7 +161,7 @@
                   </Button>
                </bottom>
       		</BorderPane>
-            <ProgressBar fx:id="progress" prefHeight="70.0" prefWidth="382.0" progress="0.0">
+            <ProgressBar fx:id="progressBar" prefHeight="70.0" prefWidth="382.0" progress="0.0">
                <styleClass>
                   <String fx:value="progress-bar-success" />
                   <String fx:value="track" />

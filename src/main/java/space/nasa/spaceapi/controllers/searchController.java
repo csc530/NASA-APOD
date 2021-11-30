@@ -22,28 +22,26 @@ import java.util.TreeSet;
 
 public class searchController implements Initializable{
 	@FXML
-	private ProgressBar progress;
+	private ProgressBar progressBar;
 	@FXML
-	private Button btnSearch;
+	private DatePicker datePicker;
 	@FXML
-	private DatePicker date;
+	private Spinner<Integer> randomSpinner;
 	@FXML
-	private Spinner<Integer> count;
+	private DatePicker startDatePicker;
 	@FXML
-	private DatePicker start;
+	private DatePicker endDatePicker;
 	@FXML
-	private DatePicker end;
-	@FXML
-	private ListView<APOD> apods;
+	private ListView<APOD> apodsList;
 	@FXML
 	private VBox controls;
 	@FXML
-	private Label dateSort;
+	private Label lblDateSort;
 	@FXML
-	private Label titleSort;
+	private Label lblTitleSort;
 	
 	/**
-	 * Returns a random valid LocalDate which an astronmy picture of the day was posted
+	 * Returns a random valid LocalDate which an astronomy picture of the day was posted
 	 * @param daysFromPresent   the upper bound of date, the amount to subtract to allow for the most recent possible
 	 *                          date to be returned. How many days ago should the upper bound be?
 	 * @param daysFromBeginning the lower bound of date. How many days after the first posted astronomy picture of
@@ -57,68 +55,87 @@ public class searchController implements Initializable{
 		return LocalDate.ofEpochDay((long) (Math.random() * (today - startDate - daysFromPresent) + (daysFromBeginning + startDate)));
 	}
 	
+	/**
+	 * This will run to search a range of dates from the startDatePicker and endDatePicker {@link DatePicker}s
+	 * It will create 2 new asynchronous {@linkplain Thread}s one to query the API and call for each {@link APOD} in
+	 * the
+	 * range
+	 * the second Thread will run to update the progress bar of the API query
+	 * The controls to search for APODs while calling the API to prevent a backlog of results and multiple Daemon
+	 * Threads
+	 * @throws IllegalStateException this is thrown as the APODs are populated outside the JFX Thread
+	 */
 	@FXML
-	void rangeSearch(ActionEvent event) throws IllegalStateException{
-		apods.getItems().clear();
-		progress.setVisible(true);
+	void
+	rangeSearch() throws IllegalStateException{
+		apodsList.getItems().clear();
+		progressBar.setVisible(true);
 		controls.setDisable(true);
-		//Thread query
+		//API query
 		new Thread(() -> {
-			if(start.getValue().isBefore(end.getValue()) || start.getValue().isEqual(end.getValue()))
+			if(startDatePicker.getValue().isBefore(endDatePicker.getValue()) || startDatePicker.getValue().isEqual(endDatePicker.getValue()))
 			{
-				TreeSet<APOD> results = API.getAPODs(start.getValue(), end.getValue());
+				TreeSet<APOD> results = API.getAPODs(startDatePicker.getValue(), endDatePicker.getValue());
 				API.setProgress(100);
 				controls.setDisable(false);
-				if(results != null)
-					apods.getItems().addAll(results);
-				else
-					new Alert(Alert.AlertType.ERROR, "Sorry something went wrong, please try again.").show();
+				if(results != null) apodsList.getItems().addAll(results);
+				else new Alert(Alert.AlertType.ERROR, "Sorry something went wrong, please try again.").show();
 			}
-			else
-				new Alert(Alert.AlertType.WARNING, "Start date must be before the end date", ButtonType.OK).show();
-			progress.setVisible(false);
+			else new Alert(Alert.AlertType.WARNING, "Start date must be before the end date", ButtonType.OK).show();
+			progressBar.setVisible(false);
 		}).start();
-		//Thread loading
+		//Loading progress bar
 		new Thread(() -> {
-			progress.setDisable(false);
-			progress.getStyleClass().remove("progress-bar-success");
+			progressBar.setDisable(false);
 			float i = 0;
 			while(API.getProgress() < 1)
 			{
-				progress.progressProperty().setValue(API.getProgress() + i);
-				i += .000000008;
-				System.out.println(i);
+				progressBar.progressProperty().setValue(API.getProgress() + i);
+				//used to have the progress bar continue to increase fluidly though it actually isn't
+				i += .0000000008;
 			}
-			progress.getStyleClass().add("progress-bar-success");
 		}, "Progress Bar").start();
-		apods.requestFocus();
+		apodsList.requestFocus();
 	}
 	
+	/**
+	 * This will sort the list of {@link APOD}s by the date or title depending on which label was clicked
+	 * The sort will toggle between ascending, descending, and non-ordered
+	 * @param event The {@link MouseEvent} called by the -Date and -Title label, used to determine which
+	 *              label
+	 *              was clicked
+	 */
 	@FXML
 	void sortList(MouseEvent event){
-		if(apods.getItems().isEmpty())
-			return;
-		String txt = switchLabels(event, event.getSource() == titleSort ? dateSort : titleSort);
+		if(apodsList.getItems().isEmpty()) return;
+		//get text of clicked label
+		//passes in non-clicked label in ternary operator
+		String txt = switchLabels(event, event.getSource() == lblTitleSort ? lblDateSort : lblTitleSort);
 		Comparator<APOD> comparator;
-		if(event.getSource() == titleSort) comparator = (a, c) -> {
-			if(txt.charAt(0) == '⇧')
-				return a.getTitle().compareTo(c.getTitle());
-			else if(txt.charAt(0) == '⇩')
-				return c.getTitle().compareTo(a.getTitle());
+		//set value of comparator to sort by date or title depending on clicked label
+		if(event.getSource() == lblTitleSort) comparator = (a, c) -> {
+			if(txt.charAt(0) == '⇧') return a.getTitle().compareTo(c.getTitle());
+			else if(txt.charAt(0) == '⇩') return c.getTitle().compareTo(a.getTitle());
 			return 0;
 		};
 		else comparator = (a, c) -> {
-			if(txt.charAt(0) == '⇧')
-				return a.getDate().compareTo(c.getDate());
-			else if(txt.charAt(0) == '⇩')
-				return c.getDate().compareTo(a.getDate());
+			if(txt.charAt(0) == '⇧') return a.getDate().compareTo(c.getDate());
+			else if(txt.charAt(0) == '⇩') return c.getDate().compareTo(a.getDate());
 			return 0;
 		};
-		List<APOD> pods = apods.getItems().stream().sorted(comparator).toList();
-		apods.getItems().clear();
-		apods.getItems().addAll(pods);
+		//sort the list of A.P.O.D.s by correct comparator
+		List<APOD> pods = apodsList.getItems().stream().sorted(comparator).toList();
+		apodsList.getItems().clear();
+		//updates the list with the sorted one
+		apodsList.getItems().addAll(pods);
 	}
 	
+	/**
+	 * Used to return the string of the Date or Title label above the Listview
+	 * @param event          The {@link MouseEvent} called by the -Date and -Title label, to determine which label was clicked
+	 * @param unClickedLabel {@linkplain Label} of the non-clicked label
+	 * @return the text of the clicked label as a {@link String}
+	 */
 	private String switchLabels(MouseEvent event, Label unClickedLabel){
 		unClickedLabel.setText("-" + unClickedLabel.getText().substring(1));
 		final Label target = (Label) event.getSource();
@@ -133,91 +150,129 @@ public class searchController implements Initializable{
 		return txt;
 	}
 	
+	/**
+	 * Populates the listview with a random amount of {@link APOD}s
+	 * @throws IllegalStateException this is thrown as the APODs are populated outside the JFX Thread
+	 */
 	@FXML
-	void random(ActionEvent event) throws IllegalStateException{
-		final Integer countValue = count.getValue();
-		apods.getItems().clear();
+	void random() throws IllegalStateException{
+		//the amount of APODs to return
+		final Integer countValue = randomSpinner.getValue();
+		apodsList.getItems().clear();
+		//Query API thread
 		new Thread(() -> {
 			API.setProgress(0);
 			LocalDate rDate = getRandomDateInAPOD(0, 0);
-			if(countValue < 2)
-				apods.getItems().add(API.getAPOD(rDate));
-			else
+			if(countValue >= 2)
 			{
-				while(apods.getItems().size() != countValue)
+				//populate listview with random A.P.O.D.s until the desired amount is returned
+				while(apodsList.getItems().size() != countValue)
 				{
-					apods.getItems().add(0, API.getAPOD(getRandomDateInAPOD(0, 0)));
-					API.setProgress((float) apods.getItems().size() / countValue);
+					apodsList.getItems().add(0, API.getAPOD(rDate));
+					//update the API progress, to accurately reflect the progress to completion
+					API.setProgress((float) apodsList.getItems().size() / countValue);
+					rDate = getRandomDateInAPOD(0, 0);
 				}
 			}
+			else //populates listview with one APOD
+				apodsList.getItems().add(API.getAPOD(rDate));
 			API.setProgress(100);
 		}, "query API").start();
+		//Progress Bar loading Thread
 		new Thread(() -> {
-			progress.setVisible(true);
-			progress.setDisable(false);
+			//shows progress bar and disable API search controls
+			progressBar.setVisible(true);
 			controls.setDisable(true);
-			progress.getStyleClass().remove("progress-bar-success");
+			//update the loading bar with the completion of the API call
 			while(API.getProgress() < 1)
-				progress.progressProperty().setValue(API.getProgress());
+				progressBar.progressProperty().setValue(API.getProgress());
 			controls.setDisable(false);
-			progress.getStyleClass().add("progress-bar-success");
-			progress.setVisible(false);
+			progressBar.setVisible(false);
 		}, "Loading").start();
 	}
 	
+	/**
+	 * Changes scenes to the A.P.O.D. view
+	 * @param event the {@link ActionEvent} used to get the stage and change scenes
+	 */
 	@FXML
 	void search(ActionEvent event){
-		final APOD apod = API.getAPOD(date.getValue());
-		Transition.to(event, "apod-view.fxml", apod.getTitle() + " - " + apod.getDate(), apod);
+		final APOD apod = API.getAPOD(datePicker.getValue());
+		String title = apod.getTitle() + " - " + apod.getDate();
+		Transition.to(event, "apod-view.fxml", title, apod);
 	}
 	
-	@Override
-	public void initialize(URL url, ResourceBundle resourceBundle){
-		progress.setVisible(false);
-		int amount = (int) (Math.random() * 7);
-		LocalDate rDate = getRandomDateInAPOD(0, amount);
-		count.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10000,
-		                                                                         (int) (Math.random() * 225 + 1)));
-		//replace all non numeric from editor
-		count.editableProperty().setValue(true);
-		count.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
-			if(!RegexValidator.forPattern("[^0-9]", "Eyo").validate(newValue).getResult())
-				count.getEditor().setText(newValue.replaceAll("[^0-9]", ""));
-			else if(!IntegerRangeValidator.between(1, 10000, "Ayo").validate(Integer.valueOf(newValue)).getResult())
-				count.getValueFactory().setValue(Integer.parseInt(oldValue));
-		});
-		addDateChecker(start);
-		addDateChecker(date);
-		addDateChecker(end);
-		start.setValue(rDate.minusDays(amount));
-		end.setValue(rDate);
-		date.setValue(LocalDate.now());
-		Transition.addStyle(apods);
-	}
-	
+	/**
+	 * This will disable each date outside the valid range for NASA's APOD API
+	 * @param datepicker The {@link DatePicker} to add the validation to
+	 */
 	public void addDateChecker(DatePicker datepicker){
 		//https://stackoverflow.com/a/53186959/16929246
 		datepicker.setDayCellFactory(param -> new DateCell(){
 			@Override
 			public void updateItem(LocalDate item, boolean empty){
 				super.updateItem(item, empty);
-				setDisable(item.isAfter(LocalDate.now()) || item.isBefore(APOD.minDate));
+				setDisable(item.isAfter(APOD.maxDate) || item.isBefore(APOD.minDate));
 			}
 		});
 	}
 	
+	/**
+	 * This will change the scene to the A.P.O.D. view when an {@link APOD} is double-clicked from the listview
+	 * @param mouseEvent A {@link MouseEvent} used to determine if an item from the list view was double-clicked
+	 */
 	public void selectAPOD(MouseEvent mouseEvent){
 		//https://stackoverflow.com/a/10950824/16929246
-		apods.setOnMouseClicked(mouse -> {
-			if(mouse.getButton().equals(MouseButton.PRIMARY) && mouse.getClickCount() == 2 && apods.getSelectionModel().getSelectedItems().size() != 0)
+		apodsList.setOnMouseClicked(mouse -> {
+			//if the user double-clicked with the primary mouse key and the listview isn't empty
+			final APOD apod = apodsList.getSelectionModel().getSelectedItem();
+			if(mouse.getButton().equals(MouseButton.PRIMARY) && mouse.getClickCount() == 2 && apod != null)
 			{
-				date.setValue(apods.getSelectionModel().getSelectedItem().getDate());
-				btnSearch.fire();
+				String title = apod.getTitle() + " - " + apod.getDate();
+				Transition.to(mouseEvent, "apod-view.fxml", title, apod);
 			}
 		});
 	}
 	
+	/**
+	 * This closes the application and the main Thread and JavaFX Thread
+	 * This does not stop any loading/progress bar Thread or Threads for API queries
+	 * @param actionEvent to get the source to close its stage
+	 */
 	public void Exit(ActionEvent actionEvent){
 		Transition.close(actionEvent);
+	}
+	
+	/**
+	 * This will initialize all nodes and with proper validation and styles when the application is loaded
+	 * @param location  The location used to resolve relative paths for the root object, or
+	 *                  {@code null} if the location is not known.
+	 * @param resources The resources used to localize the root object, or {@code null}
+	 */
+	@Override
+	public void initialize(URL location, ResourceBundle resources){
+		progressBar.setVisible(false);
+		int amount = (int) (Math.random() * 7);
+		LocalDate rDate = getRandomDateInAPOD(0, amount);
+		randomSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10000, (int) (Math.random() * 225 + 1)));
+		randomSpinner.editableProperty().setValue(true);
+		randomSpinner.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+			//replace all non-numeric from editor for the spinner's text editor
+			if(!RegexValidator.forPattern("[^0-9]", "Eyo").validate(newValue).getResult())
+				randomSpinner.getEditor().setText(newValue.replaceAll("[^0-9]", ""));
+				//if the number is outside the valid range set it to the previous value
+			else if(!IntegerRangeValidator.between(1, 10000, "Ayo").validate(Integer.valueOf(newValue)).getResult())
+				randomSpinner.getValueFactory().setValue(Integer.parseInt(oldValue));
+		});
+		//add the date validation to each Datepicker
+		addDateChecker(startDatePicker);
+		addDateChecker(datePicker);
+		addDateChecker(endDatePicker);
+		//set random date interval for the range search of API
+		startDatePicker.setValue(rDate.minusDays(amount));
+		endDatePicker.setValue(rDate);
+		datePicker.setValue(LocalDate.now());
+		//add the bootstrap to the scene
+		Transition.addStyle(apodsList);
 	}
 }
