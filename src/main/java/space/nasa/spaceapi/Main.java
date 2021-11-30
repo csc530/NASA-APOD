@@ -3,6 +3,7 @@ package space.nasa.spaceapi;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -21,5 +22,6 @@ public class Main extends Application{
 		stage.setScene(scene);
 		stage.show();
 		stage.centerOnScreen();
+		stage.getIcons().add(new Image("/imgs/nasaLogo.png"));
 	}
 }
