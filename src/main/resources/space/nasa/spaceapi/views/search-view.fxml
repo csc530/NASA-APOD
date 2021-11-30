@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -111,7 +112,7 @@
                                           <Label alignment="CENTER" minHeight="30.0" minWidth="75.0" prefHeight="30.0" prefWidth="75.0" text="Start date" textAlignment="CENTER" GridPane.halignment="CENTER" />
                                        </children>
                                     </GridPane>
-                                    <Button minHeight="30.0" mnemonicParsing="false" onAction="#rSearch" prefHeight="30.0" text="Search">
+                                    <Button minHeight="30.0" mnemonicParsing="false" onAction="#rangeSearch" prefHeight="30.0" text="Search">
                                        <styleClass>
                                           <String fx:value="btn" />
                                           <String fx:value="btn-primary" />
@@ -121,15 +122,27 @@
                               </VBox>
                            </children>
                         </VBox>
-                        <ListView fx:id="apods" onMouseClicked="#selectAPOD" prefHeight="200.0" prefWidth="365.0" HBox.hgrow="SOMETIMES">
-                           <padding>
-                              <Insets bottom="5.0" top="5.0" />
-                           </padding>
-                           <styleClass>
-                              <String fx:value="text-info" />
-                              <String fx:value="h5" />
-                           </styleClass>
-                        </ListView>
+                        <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label styleClass="h4" text="Sort By" />
+                              <HBox alignment="CENTER" prefHeight="50.0" VBox.vgrow="NEVER">
+                                 <children>
+                                    <Label fx:id="dateSort" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#sortList" styleClass="h4" text="- Date" underline="true" />
+                                    <Separator orientation="VERTICAL" prefHeight="200.0" />
+                                    <Label fx:id="titleSort" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#sortList" styleClass="h4" text="- Title" underline="true" />
+                                 </children>
+                              </HBox>
+                              <ListView fx:id="apods" onMouseClicked="#selectAPOD" prefHeight="450.0" prefWidth="415.0">
+                                 <padding>
+                                    <Insets bottom="5.0" top="5.0" />
+                                 </padding>
+                                 <styleClass>
+                                    <String fx:value="text-info" />
+                                    <String fx:value="h5" />
+                                 </styleClass>
+                              </ListView>
+                           </children>
+                        </VBox>
                      </children>
                   </HBox>
                </center>

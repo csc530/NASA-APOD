@@ -15,8 +15,7 @@ import space.nasa.spaceapi.utilities.Transition;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.ResourceBundle;
-import java.util.TreeSet;
+import java.util.*;
 
 public class searchController implements Initializable{
 	public static final LocalDate minDate = LocalDate.parse("1995-06-16");
@@ -36,6 +35,10 @@ public class searchController implements Initializable{
 	private ListView<APOD> apods;
 	@FXML
 	private VBox controls;
+	@FXML
+	private Label dateSort;
+	@FXML
+	private Label titleSort;
 	
 	/**
 	 * Returns a random valid LocalDate which an astronmy picture of the day was posted
@@ -57,26 +60,26 @@ public class searchController implements Initializable{
 	}
 	
 	@FXML
-	void rSearch(ActionEvent event) throws IllegalStateException{
+	void rangeSearch(ActionEvent event) throws IllegalStateException{
 		apods.getItems().clear();
 		progress.setVisible(true);
 		controls.setDisable(true);
 		//Thread query
-		if(start.getValue().isBefore(end.getValue()) || start.getValue().isEqual(end.getValue()))
-		{
-			TreeSet<APOD> results = API.getAPODs(start.getValue(), end.getValue());
-			API.setProgress(100);
-			controls.setDisable(false);
-			if(results != null)
-				apods.getItems().addAll(results);
+		new Thread(() -> {
+			if(start.getValue().isBefore(end.getValue()) || start.getValue().isEqual(end.getValue()))
+			{
+				TreeSet<APOD> results = API.getAPODs(start.getValue(), end.getValue());
+				API.setProgress(100);
+				controls.setDisable(false);
+				if(results != null)
+					apods.getItems().addAll(results);
+				else
+					new Alert(Alert.AlertType.ERROR, "Sorry something went wrong, please try again.").show();
+			}
 			else
-				new Alert(Alert.AlertType.ERROR, "Sorry something went wrong, please try again.").show();
-		}
-		else
-			new Thread(() -> {
-				{new Alert(Alert.AlertType.WARNING, "Start date must be before the end date", ButtonType.OK).show();}
-				progress.setVisible(false);
-			}).start();
+				new Alert(Alert.AlertType.WARNING, "Start date must be before the end date", ButtonType.OK).show();
+			progress.setVisible(false);
+		}).start();
 		//Thread loading
 		new Thread(() -> {
 			progress.setDisable(false);
@@ -85,15 +88,55 @@ public class searchController implements Initializable{
 			while(API.getProgress() < 1)
 			{
 				progress.progressProperty().setValue(API.getProgress() + i);
-				i += .0001;
+				i += .000000008;
+				System.out.println(i);
 			}
 			progress.getStyleClass().add("progress-bar-success");
-		}).start();
+		}, "Progress Bar").start();
 		apods.requestFocus();
 	}
 	
 	@FXML
-	void random(ActionEvent event){
+	void sortList(MouseEvent event){
+		if(apods.getItems().isEmpty())
+			return;
+		String txt = switchLabels(event, event.getSource() == titleSort ? dateSort : titleSort);
+		Comparator<APOD> comparator;
+		if(event.getSource() == titleSort) comparator = (a, c) -> {
+			if(txt.charAt(0) == '⇧')
+				return a.getTitle().compareTo(c.getTitle());
+			else if(txt.charAt(0) == '⇩')
+				return c.getTitle().compareTo(a.getTitle());
+			return 0;
+		};
+		else comparator = (a, c) -> {
+			if(txt.charAt(0) == '⇧')
+				return a.getDate().compareTo(c.getDate());
+			else if(txt.charAt(0) == '⇩')
+				return c.getDate().compareTo(a.getDate());
+			return 0;
+		};
+		List<APOD> pods = apods.getItems().stream().sorted(comparator).toList();
+		apods.getItems().clear();
+		apods.getItems().addAll(pods);
+	}
+	
+	private String switchLabels(MouseEvent event, Label unClickedLabel){
+		unClickedLabel.setText("-" + unClickedLabel.getText().substring(1));
+		final Label target = (Label) event.getSource();
+		String txt = target.getText();
+		txt = switch(txt.charAt(0))
+				{
+					case '-' -> "⇧" + txt.substring(1);
+					case '⇧' -> "⇩" + txt.substring(1);
+					default -> "-" + txt.substring(1);
+				};
+		target.setText(txt);
+		return txt;
+	}
+	
+	@FXML
+	void random(ActionEvent event) throws IllegalStateException{
 		final Integer countValue = count.getValue();
 		apods.getItems().clear();
 		new Thread(() -> {
@@ -110,11 +153,9 @@ public class searchController implements Initializable{
 					API.setProgress((float) results.size() / countValue);
 				}
 				apods.getItems().addAll(results);
-				System.out.println(apods.getItems().size());
-				apods.getItems().forEach(System.out::println);
 			}
 			API.setProgress(100);
-		}).start();
+		}, "query API").start();
 		new Thread(() -> {
 			progress.setVisible(true);
 			progress.setDisable(false);
@@ -125,7 +166,7 @@ public class searchController implements Initializable{
 			controls.setDisable(false);
 			progress.getStyleClass().add("progress-bar-success");
 			progress.setVisible(false);
-		}).start();
+		}, "Loading").start();
 	}
 	
 	@FXML
@@ -139,13 +180,14 @@ public class searchController implements Initializable{
 		progress.setVisible(false);
 		int amount = (int) (Math.random() * 7);
 		LocalDate rDate = getRandomDateInAPOD(0, amount);
-		count.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 150, 1));
+		count.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10000,
+		                                                                         (int) (Math.random() * 225 + 1)));
 		//replace all non numeric from editor
 		count.editableProperty().setValue(true);
 		count.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
 			if(!RegexValidator.forPattern("[^0-9]", "Eyo").validate(newValue).getResult())
 				count.getEditor().setText(newValue.replaceAll("[^0-9]", ""));
-			if(!IntegerRangeValidator.between(1, 500, "Ayo").validate(Integer.valueOf(newValue)).getResult())
+			else if(!IntegerRangeValidator.between(1, 10000, "Ayo").validate(Integer.valueOf(newValue)).getResult())
 				count.getValueFactory().setValue(Integer.parseInt(oldValue));
 		});
 		addDateChecker(start);
