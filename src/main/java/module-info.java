@@ -11,6 +11,7 @@ module space.nasa.spaceapi {
 	requires com.google.gson;
 	requires java.net.http;
 	requires javafx.media;
+	requires org.jetbrains.annotations;
 	opens space.nasa.spaceapi to javafx.fxml;
 	exports space.nasa.spaceapi;
 	exports space.nasa.spaceapi.controllers to javafx.fxml;

@@ -39,7 +39,7 @@ public class apodController implements InitializableAPOD, Initializable{
 	
 	/**
 	 * Calls the API to fetch the previous day's A.P.O.D.
-	 * This will not fetch dates before 1995-06-16, June 16, 1995. As the API has no records and will return an error
+	 * This will not fetch dates before {@link APOD#minDate} As the API has no records and will return an error
 	 */
 	@FXML
 	void prev(){
