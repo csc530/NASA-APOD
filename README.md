@@ -1,4 +1,5 @@
 # Advanced OOP - Assignment 2 By Christofer Cousins
+
 ## [🌌API, NASA's astronomy picture of the day🌌](https://api.nasa.gov/index.html#browseAPI.apod)
 
 ### Important things to note
@@ -12,7 +13,9 @@
     - This will occur if you close the app using the button and not the stop in the IDE. If you close the app while
       calling for multiple APODs that have not yet been returned to listview the 2 daemon threads will be left. One
       querying NASA's API and the other updating the no longer active progress/loading bar.
-- Many of the explanations for the APODs vary in length, but are all very long, so please resize the window (stage) accordginly to view it all. There was no elegant way to get it to all fit but did my best show the most text for most of the APODs.
+- Many of the explanations for the APODs vary in length, but are all very long, so please resize the window (stage)
+  accordginly to view it all. There was no elegant way to get it to all fit but did my best show the most text for most
+  of the APODs.
 
 ### API INFORMATION
 
@@ -23,6 +26,7 @@ the [API class](/src/main/java/space/nasa/spaceapi/utilities/API.java).
 Example query: https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY
 
 #### Be Aware
+
 __The maximum amount of API queries an hour is 1000 requests. Please be mindful if you make a lot of requests and
 suddenly errors occur.__  
 I have not done stress test for reaching those limits yet😄.

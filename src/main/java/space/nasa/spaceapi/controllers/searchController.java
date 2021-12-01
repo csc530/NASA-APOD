@@ -2,7 +2,9 @@ package space.nasa.spaceapi.controllers;
 
 import com.dlsc.formsfx.model.validators.IntegerRangeValidator;
 import com.dlsc.formsfx.model.validators.RegexValidator;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -15,10 +17,7 @@ import space.nasa.spaceapi.utilities.Transition;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.TreeSet;
+import java.util.*;
 
 public class searchController implements Initializable{
 	@FXML
@@ -81,13 +80,77 @@ public class searchController implements Initializable{
 	}
 	
 	/**
+	 * Populates the listview with a random amount of {@link APOD}s
+	 *
+	 * @throws IllegalStateException this is thrown as the APODs are populated outside the JFX Thread
+	 */
+	@FXML
+	void random(ActionEvent event) throws IllegalStateException{
+		//the amount of APODs to return
+		final Integer countValue = randomSpinner.getValue();
+		apodsList.getItems().clear();
+		//Query API thread
+		new Thread(() -> {
+			API.setProgress(0);
+			LocalDate rDate = getRandomDateInAPOD(0, 0);
+			if(countValue >= 2)
+			{
+				int i = 0;
+				HashMap<Integer, APOD> apodMap = new HashMap<>();
+				//populate listview with random A.P.O.D.s until the desired amount is returned
+				while(apodsList.getItems().size() != countValue)
+				{
+					apodMap.put(i++, API.getAPOD(rDate));
+					apodsList.getItems().add(0, apodMap.get(i - 1));
+					//update the API progress, to accurately reflect the progress to completion
+					API.setProgress((float) apodsList.getItems().size() / countValue);
+					rDate = getRandomDateInAPOD(0, 0);
+				}
+			}
+			else //populates listview with one APOD
+				apodsList.getItems().add(API.getAPOD(rDate));
+			API.setProgress(100);
+			//sorts list and gets rid of visible duplicates even though there aren't any
+			//to see what I mean comment out the line below then run, then sort using the headers; the duplicates disappear
+			Platform.runLater(() -> sortList(new Event(lblDateSort, null, null)));
+		}, "query API").start();
+		//Progress Bar loading Thread
+		new Thread(() -> {
+			//shows progress bar and disable API search controls
+			progressBar.setVisible(true);
+			controls.setDisable(true);
+			//update the loading bar with the completion of the API call
+			while(API.getProgress() < 1)
+				progressBar.progressProperty().setValue(API.getProgress());
+			controls.setDisable(false);
+			progressBar.setVisible(false);
+		}, "Loading").start();
+	}
+	
+	/**
+	 * Returns a random valid LocalDate which an astronomy picture of the day was posted
+	 *
+	 * @param daysFromPresent   the upper bound of date, the amount to subtract to allow for the most recent possible date to be returned. How many days
+	 *                          ago should the upper bound be?
+	 * @param daysFromBeginning the lower bound of date. How many days after the first posted astronomy picture of day should the lower bound be?
+	 *
+	 * @return a valid random LocalDate between given param bounds for NASA's astronomy picture of the day. Returns null if no possible could be returned
+	 * 		with the given params
+	 */
+	public static LocalDate getRandomDateInAPOD(int daysFromPresent, int daysFromBeginning){
+		long today = LocalDate.now().toEpochDay();
+		long startDate = APOD.minDate.toEpochDay();
+		return LocalDate.ofEpochDay((long) (Math.random() * (today - startDate - daysFromPresent) + (daysFromBeginning + startDate)));
+	}
+	
+	/**
 	 * This will sort the list of {@link APOD}s by the date or title depending on which label was clicked The sort will toggle between ascending,
 	 * descending, and non-ordered
 	 *
-	 * @param event The {@link MouseEvent} called by the -Date and -Title label, used to determine which label was clicked
+	 * @param event The {@link Event} called by the -Date and -Title label, used to determine which label was clicked
 	 */
 	@FXML
-	void sortList(MouseEvent event){
+	void sortList(Event event){
 		if(apodsList.getItems().isEmpty()) return;
 		//get text of clicked label
 		//passes in non-clicked label in ternary operator
@@ -119,7 +182,7 @@ public class searchController implements Initializable{
 	 *
 	 * @return the text of the clicked label as a {@link String}
 	 */
-	private String switchLabels(MouseEvent event, Label unClickedLabel){
+	private String switchLabels(Event event, Label unClickedLabel){
 		unClickedLabel.setText("-" + unClickedLabel.getText().substring(1));
 		final Label target = (Label) event.getSource();
 		String txt = target.getText();
@@ -131,64 +194,6 @@ public class searchController implements Initializable{
 				      };
 		target.setText(txt);
 		return txt;
-	}
-	
-	/**
-	 * Populates the listview with a random amount of {@link APOD}s
-	 *
-	 * @throws IllegalStateException this is thrown as the APODs are populated outside the JFX Thread
-	 */
-	@FXML
-	void random() throws IllegalStateException{
-		//the amount of APODs to return
-		final Integer countValue = randomSpinner.getValue();
-		apodsList.getItems().clear();
-		//Query API thread
-		new Thread(() -> {
-			API.setProgress(0);
-			LocalDate rDate = getRandomDateInAPOD(0, 0);
-			if(countValue >= 2)
-			{
-				//populate listview with random A.P.O.D.s until the desired amount is returned
-				while(apodsList.getItems().size() != countValue)
-				{
-					apodsList.getItems().add(0, API.getAPOD(rDate));
-					//update the API progress, to accurately reflect the progress to completion
-					API.setProgress((float) apodsList.getItems().size() / countValue);
-					rDate = getRandomDateInAPOD(0, 0);
-				}
-			}
-			else //populates listview with one APOD
-				apodsList.getItems().add(API.getAPOD(rDate));
-			API.setProgress(100);
-		}, "query API").start();
-		//Progress Bar loading Thread
-		new Thread(() -> {
-			//shows progress bar and disable API search controls
-			progressBar.setVisible(true);
-			controls.setDisable(true);
-			//update the loading bar with the completion of the API call
-			while(API.getProgress() < 1)
-				progressBar.progressProperty().setValue(API.getProgress());
-			controls.setDisable(false);
-			progressBar.setVisible(false);
-		}, "Loading").start();
-	}
-	
-	/**
-	 * Returns a random valid LocalDate which an astronomy picture of the day was posted
-	 *
-	 * @param daysFromPresent   the upper bound of date, the amount to subtract to allow for the most recent possible date to be returned. How many days
-	 *                          ago should the upper bound be?
-	 * @param daysFromBeginning the lower bound of date. How many days after the first posted astronomy picture of day should the lower bound be?
-	 *
-	 * @return a valid random LocalDate between given param bounds for NASA's astronomy picture of the day. Returns null if no possible could be returned
-	 * 		with the given params
-	 */
-	public static LocalDate getRandomDateInAPOD(int daysFromPresent, int daysFromBeginning){
-		long today = LocalDate.now().toEpochDay();
-		long startDate = APOD.minDate.toEpochDay();
-		return LocalDate.ofEpochDay((long) (Math.random() * (today - startDate - daysFromPresent) + (daysFromBeginning + startDate)));
 	}
 	
 	/**
