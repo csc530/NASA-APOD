@@ -17,7 +17,10 @@ import space.nasa.spaceapi.utilities.Transition;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.TreeSet;
 
 public class searchController implements Initializable{
 	@FXML
@@ -47,8 +50,7 @@ public class searchController implements Initializable{
 	 * @throws IllegalStateException this is thrown as the APODs are populated outside the JFX Thread
 	 */
 	@FXML
-	void
-	rangeSearch() throws IllegalStateException{
+	void rangeSearch() throws IllegalStateException{
 		apodsList.getItems().clear();
 		progressBar.setVisible(true);
 		controls.setDisable(true);
@@ -85,30 +87,27 @@ public class searchController implements Initializable{
 	 * @throws IllegalStateException this is thrown as the APODs are populated outside the JFX Thread
 	 */
 	@FXML
-	void random(ActionEvent event) throws IllegalStateException{
+	void random() throws IllegalStateException{
 		//the amount of APODs to return
 		final Integer countValue = randomSpinner.getValue();
 		apodsList.getItems().clear();
 		//Query API thread
 		new Thread(() -> {
 			API.setProgress(0);
-			LocalDate rDate = getRandomDateInAPOD(0, 0);
+			LocalDate randomDate = getRandomDateInAPOD(0, 0);
 			if(countValue >= 2)
 			{
-				int i = 0;
-				HashMap<Integer, APOD> apodMap = new HashMap<>();
 				//populate listview with random A.P.O.D.s until the desired amount is returned
 				while(apodsList.getItems().size() != countValue)
 				{
-					apodMap.put(i++, API.getAPOD(rDate));
-					apodsList.getItems().add(0, apodMap.get(i - 1));
+					apodsList.getItems().add(0, API.getAPOD(randomDate));
 					//update the API progress, to accurately reflect the progress to completion
 					API.setProgress((float) apodsList.getItems().size() / countValue);
-					rDate = getRandomDateInAPOD(0, 0);
+					randomDate = getRandomDateInAPOD(0, 0);
 				}
 			}
 			else //populates listview with one APOD
-				apodsList.getItems().add(API.getAPOD(rDate));
+				apodsList.getItems().add(API.getAPOD(randomDate));
 			API.setProgress(100);
 			//sorts list and gets rid of visible duplicates even though there aren't any
 			//to see what I mean comment out the line below then run, then sort using the headers; the duplicates disappear
