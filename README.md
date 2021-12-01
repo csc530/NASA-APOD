@@ -16,7 +16,7 @@
 ### API INFORMATION
 
 Information about the API can be found on [NASA's website](https://api.nasa.gov/index.html#browseAPI.apod).  
-More detailed information can be found in their [GitHub repository](https://github.com/nasa/apod-api)  
+More detailed information can be found in their [GitHub repository](https://github.com/nasa/apod-api#docs-)  
 If you need my key it can be found in my uri sting in
 the [API class](/src/main/java/space/nasa/spaceapi/utilities/API.java).   
 Example query: https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY
