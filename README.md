@@ -12,6 +12,7 @@
     - This will occur if you close the app using the button and not the stop in the IDE. If you close the app while
       calling for multiple APODs that have not yet been returned to listview the 2 daemon threads will be left. One
       querying NASA's API and the other updating the no longer active progress/loading bar.
+- Many of the explanations for the APODs vary in length, but are all very long, so please resize the window (stage) accordginly to view it all. There was no elegant way to get it to all fit but did my best show the most text for most of the APODs.
 
 ### API INFORMATION
 
