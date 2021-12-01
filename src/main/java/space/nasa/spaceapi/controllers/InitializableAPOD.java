@@ -7,8 +7,8 @@ import space.nasa.spaceapi.models.APOD;
  */
 public interface InitializableAPOD{
 	/**
-	 * Should be called when at the begging of controller class instantiation to set up a needed APOD object within the
-	 * class
+	 * Should be called when at the begging of controller class instantiation to set up a needed APOD object within the class
+	 *
 	 * @param apod the desired {@code APOD} to send to the controller
 	 */
 	void initializeAPOD(APOD apod);

@@ -41,28 +41,10 @@ public class searchController implements Initializable{
 	private Label lblTitleSort;
 	
 	/**
-	 * Returns a random valid LocalDate which an astronomy picture of the day was posted
-	 * @param daysFromPresent   the upper bound of date, the amount to subtract to allow for the most recent possible
-	 *                          date to be returned. How many days ago should the upper bound be?
-	 * @param daysFromBeginning the lower bound of date. How many days after the first posted astronomy picture of
-	 *                          day should the lower bound be?
-	 * @return a valid random LocalDate between given param bounds for NASA's astronomy picture of the day. Returns
-	 * 		null if no possible could be returned with the given params
-	 */
-	public static LocalDate getRandomDateInAPOD(int daysFromPresent, int daysFromBeginning){
-		long today = LocalDate.now().toEpochDay();
-		long startDate = APOD.minDate.toEpochDay();
-		return LocalDate.ofEpochDay((long) (Math.random() * (today - startDate - daysFromPresent) + (daysFromBeginning + startDate)));
-	}
-	
-	/**
-	 * This will run to search a range of dates from the startDatePicker and endDatePicker {@link DatePicker}s
-	 * It will create 2 new asynchronous {@linkplain Thread}s one to query the API and call for each {@link APOD} in
-	 * the
-	 * range
-	 * the second Thread will run to update the progress bar of the API query
-	 * The controls to search for APODs while calling the API to prevent a backlog of results and multiple Daemon
-	 * Threads
+	 * This will run to search a range of dates from the startDatePicker and endDatePicker {@link DatePicker}s It will create 2 new asynchronous
+	 * {@linkplain Thread}s one to query the API and call for each {@link APOD} in the range the second Thread will run to update the progress bar of the
+	 * API query The controls to search for APODs while calling the API to prevent a backlog of results and multiple Daemon Threads
+	 *
 	 * @throws IllegalStateException this is thrown as the APODs are populated outside the JFX Thread
 	 */
 	@FXML
@@ -99,11 +81,10 @@ public class searchController implements Initializable{
 	}
 	
 	/**
-	 * This will sort the list of {@link APOD}s by the date or title depending on which label was clicked
-	 * The sort will toggle between ascending, descending, and non-ordered
-	 * @param event The {@link MouseEvent} called by the -Date and -Title label, used to determine which
-	 *              label
-	 *              was clicked
+	 * This will sort the list of {@link APOD}s by the date or title depending on which label was clicked The sort will toggle between ascending,
+	 * descending, and non-ordered
+	 *
+	 * @param event The {@link MouseEvent} called by the -Date and -Title label, used to determine which label was clicked
 	 */
 	@FXML
 	void sortList(MouseEvent event){
@@ -132,8 +113,10 @@ public class searchController implements Initializable{
 	
 	/**
 	 * Used to return the string of the Date or Title label above the Listview
+	 *
 	 * @param event          The {@link MouseEvent} called by the -Date and -Title label, to determine which label was clicked
 	 * @param unClickedLabel {@linkplain Label} of the non-clicked label
+	 *
 	 * @return the text of the clicked label as a {@link String}
 	 */
 	private String switchLabels(MouseEvent event, Label unClickedLabel){
@@ -141,17 +124,18 @@ public class searchController implements Initializable{
 		final Label target = (Label) event.getSource();
 		String txt = target.getText();
 		txt = switch(txt.charAt(0))
-				{
-					case '-' -> "⇧" + txt.substring(1);
-					case '⇧' -> "⇩" + txt.substring(1);
-					default -> "-" + txt.substring(1);
-				};
+				      {
+					      case '-' -> "⇧" + txt.substring(1);
+					      case '⇧' -> "⇩" + txt.substring(1);
+					      default -> "-" + txt.substring(1);
+				      };
 		target.setText(txt);
 		return txt;
 	}
 	
 	/**
 	 * Populates the listview with a random amount of {@link APOD}s
+	 *
 	 * @throws IllegalStateException this is thrown as the APODs are populated outside the JFX Thread
 	 */
 	@FXML
@@ -192,7 +176,24 @@ public class searchController implements Initializable{
 	}
 	
 	/**
+	 * Returns a random valid LocalDate which an astronomy picture of the day was posted
+	 *
+	 * @param daysFromPresent   the upper bound of date, the amount to subtract to allow for the most recent possible date to be returned. How many days
+	 *                          ago should the upper bound be?
+	 * @param daysFromBeginning the lower bound of date. How many days after the first posted astronomy picture of day should the lower bound be?
+	 *
+	 * @return a valid random LocalDate between given param bounds for NASA's astronomy picture of the day. Returns null if no possible could be returned
+	 * 		with the given params
+	 */
+	public static LocalDate getRandomDateInAPOD(int daysFromPresent, int daysFromBeginning){
+		long today = LocalDate.now().toEpochDay();
+		long startDate = APOD.minDate.toEpochDay();
+		return LocalDate.ofEpochDay((long) (Math.random() * (today - startDate - daysFromPresent) + (daysFromBeginning + startDate)));
+	}
+	
+	/**
 	 * Changes scenes to the A.P.O.D. view
+	 *
 	 * @param event the {@link ActionEvent} used to get the stage and change scenes
 	 */
 	@FXML
@@ -203,22 +204,8 @@ public class searchController implements Initializable{
 	}
 	
 	/**
-	 * This will disable each date outside the valid range for NASA's APOD API
-	 * @param datepicker The {@link DatePicker} to add the validation to
-	 */
-	public void addDateChecker(DatePicker datepicker){
-		//https://stackoverflow.com/a/53186959/16929246
-		datepicker.setDayCellFactory(param -> new DateCell(){
-			@Override
-			public void updateItem(LocalDate item, boolean empty){
-				super.updateItem(item, empty);
-				setDisable(item.isAfter(APOD.maxDate) || item.isBefore(APOD.minDate));
-			}
-		});
-	}
-	
-	/**
 	 * This will change the scene to the A.P.O.D. view when an {@link APOD} is double-clicked from the listview
+	 *
 	 * @param mouseEvent A {@link MouseEvent} used to determine if an item from the list view was double-clicked
 	 */
 	public void selectAPOD(MouseEvent mouseEvent){
@@ -235,8 +222,8 @@ public class searchController implements Initializable{
 	}
 	
 	/**
-	 * This closes the application and the main Thread and JavaFX Thread
-	 * This does not stop any loading/progress bar Thread or Threads for API queries
+	 * This closes the application and the main Thread and JavaFX Thread This does not stop any loading/progress bar Thread or Threads for API queries
+	 *
 	 * @param actionEvent to get the source to close its stage
 	 */
 	public void Exit(ActionEvent actionEvent){
@@ -245,8 +232,8 @@ public class searchController implements Initializable{
 	
 	/**
 	 * This will initialize all nodes and with proper validation and styles when the application is loaded
-	 * @param location  The location used to resolve relative paths for the root object, or
-	 *                  {@code null} if the location is not known.
+	 *
+	 * @param location  The location used to resolve relative paths for the root object, or {@code null} if the location is not known.
 	 * @param resources The resources used to localize the root object, or {@code null}
 	 */
 	@Override
@@ -274,5 +261,21 @@ public class searchController implements Initializable{
 		datePicker.setValue(LocalDate.now());
 		//add the bootstrap to the scene
 		Transition.addStyle(apodsList);
+	}
+	
+	/**
+	 * This will disable each date outside the valid range for NASA's APOD API
+	 *
+	 * @param datepicker The {@link DatePicker} to add the validation to
+	 */
+	public void addDateChecker(DatePicker datepicker){
+		//https://stackoverflow.com/a/53186959/16929246
+		datepicker.setDayCellFactory(param -> new DateCell(){
+			@Override
+			public void updateItem(LocalDate item, boolean empty){
+				super.updateItem(item, empty);
+				setDisable(item.isAfter(APOD.maxDate) || item.isBefore(APOD.minDate));
+			}
+		});
 	}
 }

@@ -26,19 +26,11 @@ public class API{
 	
 	/**
 	 * Returns an {@link APOD} of today's A.P.O.D.
+	 *
 	 * @return today's A.P.O.D.
 	 */
 	public static APOD getAPOD(){
 		return getAPOD(uri);
-	}
-	
-	/**
-	 * Call APOD API to get the specified date's A.P.O.D.
-	 * @param date a {@link LocalDate} of desired A.P.O.D.
-	 * @return the {@link APOD} of the given date
-	 */
-	public static APOD getAPOD(LocalDate date){
-		return getAPOD(uri + "&date=" + date);
 	}
 	
 	private static APOD getAPOD(String uri){
@@ -56,6 +48,17 @@ public class API{
 	}
 	
 	/**
+	 * Call APOD API to get the specified date's A.P.O.D.
+	 *
+	 * @param date a {@link LocalDate} of desired A.P.O.D.
+	 *
+	 * @return the {@link APOD} of the given date
+	 */
+	public static APOD getAPOD(LocalDate date){
+		return getAPOD(uri + "&date=" + date);
+	}
+	
+	/**
 	 * Get the curent progress of the current or previous API call
 	 * <ul>
 	 *     <li>
@@ -68,6 +71,7 @@ public class API{
 	 *         returns between 0 and 1 if the query has not finished returning all the {@link APOD} elements
 	 *     </li>
 	 * </ul>
+	 *
 	 * @return the progress of the API call as decimal (percent value)
 	 */
 	public static float getProgress(){
@@ -75,8 +79,8 @@ public class API{
 	}
 	
 	/**
-	 * Set the progress to given {@code float}
-	 * Best used if chaining together multiple singular API calls of one A.P.O.D.
+	 * Set the progress to given {@code float} Best used if chaining together multiple singular API calls of one A.P.O.D.
+	 *
 	 * @param progress the {@code float} to set the API progress to
 	 */
 	public static void setProgress(float progress){
@@ -86,19 +90,19 @@ public class API{
 	/**
 	 * Call APOD API to get multiple A.P.O.D.s between the {@code start} and {@code end} date; inclusive.
 	 * <p>
-	 * If the start date is after the end date null will be returned. Furthermore if either the start or end date
-	 * is outside the bounds of the {@link APOD#minDate} and {@link APOD#maxDate} respectively, null will be
-	 * returned
+	 * If the start date is after the end date null will be returned. Furthermore if either the start or end date is outside the bounds of the {@link
+	 * APOD#minDate} and {@link APOD#maxDate} respectively, null will be returned
 	 * </p>
 	 * <p>
-	 * if more than 50 A.P.O.D.s are requested the call will be divided to multiple calls
-	 * the progress of the overall call can be monitored with {@link API#getProgress()}
+	 * if more than 50 A.P.O.D.s are requested the call will be divided to multiple calls the progress of the overall call can be monitored with {@link
+	 * API#getProgress()}
 	 * </p>
-	 * @param start the beginning {@link LocalDate} to search between for A.P.O.D.s must be after
-	 *              {@link APOD#minDate} (inclusive)
+	 *
+	 * @param start the beginning {@link LocalDate} to search between for A.P.O.D.s must be after {@link APOD#minDate} (inclusive)
 	 * @param end   the last {@link LocalDate} to search between for A.P.O.D.s before {@link APOD#maxDate}  (inclusive)
-	 * @return returns a {@link TreeSet<APOD>} of all the {@link APOD}s or null if the either dates conditions aren't
-	 * 		met or request is interrupted or could not be made
+	 *
+	 * @return returns a {@link TreeSet<APOD>} of all the {@link APOD}s or null if the either dates conditions aren't met or request is interrupted or
+	 * 		could not be made
 	 */
 	public static TreeSet<APOD> getAPODs(LocalDate start, LocalDate end){
 		if(start.isAfter(end) || start.isBefore(APOD.minDate) || end.isAfter(APOD.maxDate))
