@@ -1,8 +1,6 @@
 # Advanced OOP - Assignment 2 By Christofer Cousins
 ## [🌌API, NASA's astronomy picture of the day🌌](https://api.nasa.gov/index.html#browseAPI.apod)
 
-<hr/>
-
 ### Important things to note
 
 - A common acronym used is APOD, A.P.O.D., and apod which all mean astronomy picture of the day
