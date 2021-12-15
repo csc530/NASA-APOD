@@ -18,7 +18,7 @@ public class Main extends Application{
 		Scene scene = new Scene(fxmlLoader.load());
 		stage.setTitle("⭐Explore NASA's API ⭐ Astronomy Picture Of The Day⭐");
 		stage.setScene(scene);
-		stage.show();
 		stage.centerOnScreen();
+		stage.show();
 	}
 }

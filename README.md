@@ -16,10 +16,10 @@
 - Many of the explanations for the APODs vary in length, but are all very long, so please resize the window (stage)
   accordingly to view it all. There was no elegant way to get it to all fit but did my best show the most text for most
   of the APODs.
-- If Maven dependencies don't load please try opening theMaven panel (`shift + shift` type "`maven"`) and click the 
+- If Maven dependencies don't load please try opening theMaven panel (`shift + shift` type "`maven"`) and click the
   refresh button
-- If no explanation or note appears for an APOD it's because there is none and just a graphic, this common of 
-  queries of old APODs, before 2002
+- If no explanation or note appears for an APOD it's because there is none and just a graphic, this common of queries of
+  old APODs, before 2002
 
 ### API INFORMATION
 
@@ -37,10 +37,10 @@ I have not done stress test for reaching those limits yet😄.
 
 #### API Response Validation
 
-if you would like to validate the information my app displays from the api you can search the results using my key 
-with url, https://api.nasa.gov/planetary/apod?thumbs=true&api_key=1rp568Tl7gR9976UiFzaPbedFvxnBFFYbdqxXazV   
+if you would like to validate the information my app displays from the api you can search the results using my key with
+url, https://api.nasa.gov/planetary/apod?thumbs=true&api_key=1rp568Tl7gR9976UiFzaPbedFvxnBFFYbdqxXazV
 
 - for multiple results add on `&start_date=` _**start_date from app**_ `&end_date=` **_end_date from app_**
-  - dates formatted as `YYYY-MM-DD`
+    - dates formatted as `YYYY-MM-DD`
 - A single APOD `&date=` **_date from app_**
-I recommend to search within firefox for pretty and legibleJSON formatting
+  I recommend to search within firefox for pretty and legibleJSON formatting
